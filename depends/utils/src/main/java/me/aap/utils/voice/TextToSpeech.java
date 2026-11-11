@@ -72,9 +72,6 @@ public class TextToSpeech implements Closeable {
 	}
 
 	/**
-	 * @noinspection UnusedReturnValue
-	 */
-	/**
 	 * Creates a synthesizer using only an installed voice that explicitly reports
 	 * that it does not require a network connection.
 	 */
@@ -128,6 +125,7 @@ public class TextToSpeech implements Closeable {
 		if (tts == null) throw new TextToSpeechException("TTS closed", TTS_ERR_CLOSED);
 		Voice selected = findLocalVoice(lang);
 		if (selected == null) {
+			close();
 			throw new TextToSpeechException("No offline TTS voice installed for " + lang,
 					TTS_ERR_LANG_NOT_SUPPORTED);
 		}
