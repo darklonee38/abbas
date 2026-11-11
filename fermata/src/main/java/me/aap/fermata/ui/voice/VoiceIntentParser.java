@@ -15,12 +15,12 @@ public final class VoiceIntentParser {
 	private static final Map<String, String> ADDON_ALIASES = new LinkedHashMap<>();
 
 	static {
-		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube\'da");
-		alias("tv", "tv", "television", "tivi", "truyền hình", "truyen hinh",
-				"xtream", "xtreme", "iptv", "televizyon");
-		alias("radio", "radio", "đài", "dai", "radyo");
+		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube'da", "youtube’dan", "youtube'dan");
+		alias("tv", "tv", "tv'de", "tv’de", "televizyonda", "televizyondan", "iptv", "iptv'de", "iptv’de",
+				"television", "tivi", "truyền hình", "truyen hinh", "xtream", "xtreme", "televizyon");
+		alias("radio", "radio", "radio'da", "radio’da", "đài", "dai", "radyo", "radyo'da", "radyo’da");
 		alias("stremio", "stremio");
-		alias("podcast", "podcast", "podcasts");
+		alias("podcast", "podcast", "podcasts", "podcast'te", "podcast’te", "podcastte");
 		alias("audiobook", "audiobook", "audiobooks", "sách nói", "sach noi", "sesli kitap");
 		alias("web", "web", "browser", "trình duyệt", "trinh duyet", "tarayıcı", "tarayici");
 		alias("chatgpt", "chatgpt", "chat gpt", "gpt", "assistant", "trợ lý", "tro ly");
@@ -39,24 +39,24 @@ public final class VoiceIntentParser {
 				phrase.toLowerCase(locale) : phrase);
 		if (text.isEmpty()) return null;
 
-		if (isAny(text, "play", "phát", "phat", "resume", "tiếp tục", "tiep tuc", "oynat", "başlat", "devam et"))
+		if (isAny(text, "play", "phát", "phat", "resume", "tiếp tục", "tiep tuc", "oynat", "başlat", "devam et", "devam", "çal", "cal", "müziği çal", "muzigi cal"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PLAY);
-		if (isAny(text, "pause", "tạm dừng", "tam dung", "duraklat"))
+		if (isAny(text, "pause", "tạm dừng", "tam dung", "duraklat", "beklet", "oynatmayı duraklat"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PAUSE);
-		if (isAny(text, "stop", "dừng", "dung", "durdur"))
+		if (isAny(text, "stop", "dừng", "dung", "durdur", "oynatmayı durdur"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.STOP);
 		if (isAny(text, "next", "next track", "next item", "bài tiếp theo", "bai tiep theo",
-				"kênh tiếp theo", "kenh tiep theo", "tập tiếp theo", "tap tiep theo", "sonraki", "sonraki kanal", "sonraki bölüm", "sonraki parça"))
+				"kênh tiếp theo", "kenh tiep theo", "tập tiếp theo", "tap tiep theo", "sonraki", "sonraki kanal", "bir sonraki kanal", "sonraki şarkı", "sonraki parça", "sonraki bölüm"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.NEXT);
 		if (isAny(text, "previous", "previous track", "previous item", "bài trước",
-				"bai truoc", "kênh trước", "kenh truoc", "tập trước", "tap truoc", "önceki", "önceki kanal", "önceki bölüm", "önceki parça"))
+				"bai truoc", "kênh trước", "kenh truoc", "tập trước", "tap truoc", "önceki", "önceki kanal", "bir önceki kanal", "önceki şarkı", "önceki parça", "önceki bölüm"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PREVIOUS);
 		if (isAny(text, "go back", "quay lại", "quay lai", "geri", "geri dön"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.BACK);
-		if (isAny(text, "what is playing", "now playing", "đang phát gì", "dang phat gi", "ne çalıyor", "şu an oynatılan"))
+		if (isAny(text, "what is playing", "now playing", "đang phát gì", "dang phat gi", "ne çalıyor", "şu an oynatılan", "şu an ne çalıyor", "şu anda ne çalıyor"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.OPEN_CURRENT);
 		if (isAny(text, "play favorites", "play my favorites", "phát mục yêu thích",
-				"phat muc yeu thich", "favorileri oynat", "favorilerimi oynat", "oynat favoriler"))
+				"phat muc yeu thich", "favorileri oynat", "favorilerimi oynat", "oynat favoriler", "favorilerimi aç", "favorilerden oynat"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PLAY_FAVORITES);
 
 		int selection = parseSelectionIndex(text);
@@ -65,9 +65,10 @@ public final class VoiceIntentParser {
 		// Turkish commonly places the verb after the content: "YouTube aç", "TV TRT 1 oynat".
 		// Keep an already explicit action prefix intact, including English queries ending in a Turkish verb.
 		if (locale != null && "tr".equals(locale.getLanguage()) && parseSearchAction(text) == null && !text.startsWith("altyazı")) {
-			for (String verb : new String[]{"aç", "oynat", "ara", "bul"}) {
+			for (String verb : new String[]{"aç", "oynat", "ara", "bul", "izle", "seyret", "dinle"}) {
 				if (text.endsWith(" " + verb)) {
-					text = verb + " " + text.substring(0, text.length() - verb.length()).trim();
+					String action = ("izle".equals(verb) || "seyret".equals(verb) || "dinle".equals(verb)) ? "oynat" : verb;
+					text = action + " " + text.substring(0, text.length() - verb.length()).trim();
 					break;
 				}
 			}
@@ -108,13 +109,13 @@ public final class VoiceIntentParser {
 		String text = normalize(phrase);
 		if (text.isEmpty()) return -1;
 		if (isAny(text, "1", "one", "first", "number one", "result one", "số một",
-				"so mot", "kết quả một", "ket qua mot", "bir", "birinci", "birinci sonuç"))
+				"so mot", "kết quả một", "ket qua mot", "bir", "birinci", "birinci sonuç", "ilkini", "ilkini oynat", "birincisini", "ilk sonuç", "ilk sonucu oynat"))
 			return 0;
 		if (isAny(text, "2", "two", "second", "number two", "result two", "số hai",
-				"so hai", "kết quả hai", "ket qua hai", "iki", "ikinci", "ikinci sonuç"))
+				"so hai", "kết quả hai", "ket qua hai", "iki", "ikinci", "ikinci sonuç", "ikincisini", "ikinciyi", "ikinciyi oynat", "ikinci sonucu oynat"))
 			return 1;
 		if (isAny(text, "3", "three", "third", "number three", "result three", "số ba",
-				"so ba", "kết quả ba", "ket qua ba", "üç", "üçüncü", "üçüncü sonuç"))
+				"so ba", "kết quả ba", "ket qua ba", "üç", "üçüncü", "üçüncü sonuç", "üçüncüyü", "üçüncüsünü", "üçüncü sonucu oynat"))
 			return 2;
 		return -1;
 	}

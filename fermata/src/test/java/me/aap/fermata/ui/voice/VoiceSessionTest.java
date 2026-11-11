@@ -36,6 +36,18 @@ public class VoiceSessionTest {
 	}
 
 	@Test
+	public void turkishFollowUpSelectionResolvesTheMatchingStableResult() {
+		VoiceSession s = new VoiceSession();
+		s.beginSelection(List.of(
+				new VoiceSession.Option("video-a", "First", null),
+				new VoiceSession.Option("video-b", "Second", null),
+				new VoiceSession.Option("video-c", "Third", null)), 100);
+
+		assertEquals("video-b", s.resolveSelection("ikincisini", Locale.forLanguageTag("tr-TR"), 101).getStableId());
+		assertEquals(VoiceSession.Mode.COMMAND, s.getMode());
+	}
+
+	@Test
 	public void addonOwnedOptionCarriesStableTarget() {
 		VoiceSession.Option option = new VoiceSession.Option("youtube:video-id", "Numb",
 				"Linkin Park", "youtube");

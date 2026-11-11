@@ -249,8 +249,10 @@ public interface MainActivityPrefs
 	}
 
 	default boolean getVoiceControlEnabledPref() {
-        // The minimal Mola build does not request microphone access.
-        return false;
+		// Voice control starts only from the explicit user button/key action.
+		// Reading the preference here keeps the feature opt-in controllable without
+		// requesting microphone permission during application startup.
+		return getBooleanPref(VOICE_CONTROl_ENABLED);
 	}
 
 	default boolean getVoiceControlFBPref() {

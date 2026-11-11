@@ -27,12 +27,46 @@ public class VoiceIntentParserTest {
 		Locale tr = Locale.forLanguageTag("tr");
 		assertEquals(VoiceIntent.PlaybackAction.PAUSE, VoiceIntentParser.parse("duraklat", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.NEXT, VoiceIntentParser.parse("sonraki kanal", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.NEXT, VoiceIntentParser.parse("sonraki şarkı", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PREVIOUS, VoiceIntentParser.parse("önceki şarkı", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PLAY_FAVORITES, VoiceIntentParser.parse("favorilerimi aç", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PLAY, VoiceIntentParser.parse("çal", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.BACK, VoiceIntentParser.parse("geri dön", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.PLAY_FAVORITES, VoiceIntentParser.parse("favorilerimi oynat", tr).getPlaybackAction());
 		assertEquals(1, VoiceIntentParser.parse("ikinci sonuç", tr).getSelectionIndex());
+		assertEquals(0, VoiceIntentParser.parse("ilkini oynat", tr).getSelectionIndex());
+		assertEquals(1, VoiceIntentParser.parse("ikincisini", tr).getSelectionIndex());
+		assertEquals(2, VoiceIntentParser.parse("üçüncüyü", tr).getSelectionIndex());
+		assertEquals(VoiceIntent.PlaybackAction.PLAY, VoiceIntentParser.parse("devam et", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PAUSE, VoiceIntentParser.parse("oynatmayı duraklat", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.OPEN_CURRENT, VoiceIntentParser.parse("şu an ne çalıyor", tr).getPlaybackAction());
 		assertNull(VoiceIntentParser.parse("hava nasıl", tr));
 		assertNull(VoiceIntentParser.parse("altyazıları aç", tr));
 		assertNull(VoiceIntentParser.parse("oynat youtube", tr));
+	}
+
+	@Test
+	public void parsesNaturalTurkishWatchAndListenCommands() {
+		Locale tr = Locale.forLanguageTag("tr");
+
+		VoiceIntent youtube = VoiceIntentParser.parse("YouTube'da İstanbul belgeseli izle", tr);
+		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, youtube.getKind());
+		assertEquals(VoiceIntent.SearchAction.PLAY, youtube.getSearchAction());
+		assertEquals("youtube", youtube.getAddon());
+		assertEquals("istanbul belgeseli", youtube.getQuery());
+
+		VoiceIntent radio = VoiceIntentParser.parse("Radyo jazz dinle", tr);
+		assertEquals(VoiceIntent.SearchAction.PLAY, radio.getSearchAction());
+		assertEquals("radio", radio.getAddon());
+		assertEquals("jazz", radio.getQuery());
+
+		VoiceIntent iptv = VoiceIntentParser.parse("TV'de TRT haber izle", tr);
+		assertEquals("tv", iptv.getAddon());
+		assertEquals("trt haber", iptv.getQuery());
+
+		VoiceIntent podcast = VoiceIntentParser.parse("Podcast'te yapay zeka dinle", tr);
+		assertEquals("podcast", podcast.getAddon());
+		assertEquals("yapay zeka", podcast.getQuery());
 	}
 
 	@Test

@@ -19,6 +19,53 @@ public class VoicePipelineIntegrationTest {
 			new VoiceEndpointPolicy(100, 50, 300, 20, 2);
 
 	@Test
+	public void turkishCommandsPreservePlaybackAndAddonSearchRouting() {
+		Locale turkish = Locale.forLanguageTag("tr-TR");
+
+		VoiceIntent pause = VoiceIntentParser.parse("duraklat", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, pause.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.PAUSE, pause.getPlaybackAction());
+
+		VoiceIntent next = VoiceIntentParser.parse("sonraki kanal", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, next.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.NEXT, next.getPlaybackAction());
+
+		VoiceIntent nextExplicit = VoiceIntentParser.parse("bir sonraki kanal", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, nextExplicit.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.NEXT, nextExplicit.getPlaybackAction());
+
+		VoiceIntent previous = VoiceIntentParser.parse("bir önceki kanal", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, previous.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.PREVIOUS, previous.getPlaybackAction());
+
+		VoiceIntent tv = VoiceIntentParser.parse("TV TRT 1 oynat", turkish);
+		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, tv.getKind());
+		assertEquals("tv", tv.getAddon());
+		assertEquals("trt 1", tv.getQuery());
+
+		VoiceIntent youtube = VoiceIntentParser.parse("YouTube'da haber ara", turkish);
+		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, youtube.getKind());
+		assertEquals("youtube", youtube.getAddon());
+		assertEquals("haber", youtube.getQuery());
+
+		VoiceIntent openIptv = VoiceIntentParser.parse("IPTV aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openIptv.getKind());
+		assertEquals("tv", openIptv.getAddon());
+
+		VoiceIntent openRadio = VoiceIntentParser.parse("radyo aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openRadio.getKind());
+		assertEquals("radio", openRadio.getAddon());
+
+		VoiceIntent openPodcast = VoiceIntentParser.parse("podcast aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openPodcast.getKind());
+		assertEquals("podcast", openPodcast.getAddon());
+
+		VoiceIntent openYoutube = VoiceIntentParser.parse("YouTube aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openYoutube.getKind());
+		assertEquals("youtube", openYoutube.getAddon());
+	}
+
+	@Test
 	public void longEnglishMediaNameWaitsForFinalResult() {
 		Fixture f = new Fixture(true);
 		String[] partials = {

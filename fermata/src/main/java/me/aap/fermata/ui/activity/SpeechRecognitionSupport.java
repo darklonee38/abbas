@@ -9,6 +9,8 @@ import static me.aap.utils.async.Completed.failed;
 import static me.aap.utils.ui.UiUtils.showAlert;
 
 import android.content.Context;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.speech.SpeechRecognizer;
 
 import androidx.core.content.ContextCompat;
@@ -35,6 +37,22 @@ final class SpeechRecognitionSupport {
 		if (SpeechRecognizer.isRecognitionAvailable(context)) return completedVoid();
 		IllegalStateException error =
 				new IllegalStateException("Speech recognition is not available");
+		Log.e(error);
+		showAlert(context, R.string.err_speech_recognition_unavailable);
+		return failed(error);
+	}
+
+	/**
+	 * ABBAS AI Voice is local-only: never silently fall back to a provider that may use
+	 * network recognition. Android exposes the on-device service from API 31 onward.
+	 */
+	static FutureSupplier<Void> requireOnDeviceRecognitionService(Context context) {
+		if ((VERSION.SDK_INT >= VERSION_CODES.S) &&
+				SpeechRecognizer.isOnDeviceRecognitionAvailable(context)) {
+			return completedVoid();
+		}
+		IllegalStateException error = new IllegalStateException(
+				"On-device speech recognition is not available on this device");
 		Log.e(error);
 		showAlert(context, R.string.err_speech_recognition_unavailable);
 		return failed(error);

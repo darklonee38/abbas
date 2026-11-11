@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class VoiceGlobalEntryContractTest {
 	@Test
-	public void sharedMicrophonesUseGlobalEntryWhileChatKeepsItsContextualEntry()
+	public void sharedMicrophonesUseGlobalEntry()
 			throws IOException {
 		assertTrue(source("fermata/src/main/java/me/aap/fermata/ui/fragment/ToolBarMediator.java")
 				.contains("startGlobalVoiceControl()"));
@@ -20,8 +20,22 @@ public class VoiceGlobalEntryContractTest {
 				.contains("startGlobalVoiceControl()"));
 		assertTrue(source("fermata/src/main/java/me/aap/fermata/ui/fragment/FloatingButtonMediator.java")
 				.contains("startGlobalVoiceControl()"));
-		assertTrue(source("modules/chat/src/main/java/me/aap/fermata/addon/chat/ChatFragment.java")
-				.contains("public boolean startVoiceAssistant()"));
+	}
+
+
+	@Test
+	public void voiceActivationAndFeedbackRemainLocalAndUserInitiated() throws IOException {
+		String manifest = source("fermata/src/main/AndroidManifest.xml");
+		assertTrue(manifest.contains("android.permission.RECORD_AUDIO"));
+		String prefs = source("fermata/src/main/java/me/aap/fermata/ui/activity/MainActivityPrefs.java");
+		assertTrue(prefs.contains("return getBooleanPref(VOICE_CONTROl_ENABLED);"));
+		String feedback = source("fermata/src/main/java/me/aap/fermata/ui/activity/VoiceFeedbackController.java");
+		assertTrue(feedback.contains("TextToSpeech.createLocalOnly(context, locale)"));
+		assertTrue(feedback.contains("Toast.makeText(context, offlineVoiceMessage(locale)"));
+		String coordinator = source(
+				"fermata/src/main/java/me/aap/fermata/ui/activity/VoiceInteractionCoordinator.java");
+		assertTrue(coordinator.contains("voiceFeedback.speak("));
+		assertTrue(coordinator.contains("voiceFeedback.close()"));
 	}
 
 	private static String source(String relative) throws IOException {

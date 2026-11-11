@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 import org.junit.Test;
 
-/** Guards the non-negotiable single-package FermataX distribution contract. */
+/** Guards the non-negotiable single-package ABBAS distribution contract. */
 public class DistributionContractTest {
 	@Test
 	public void localBuildProducesOneUniversalApkWithoutPlatformOrAbiSplit() throws Exception {
@@ -19,9 +19,9 @@ public class DistributionContractTest {
 		assertTrue(build.contains("package${app_flavor}Auto${BUILD_TYPE}UniversalApk"));
 		assertTrue(build.contains("verifyWebOnlyProductionGraph"));
 		assertTrue(build.contains("output_root=\"fermata/build/outputs/apk_from_bundle\""));
-		assertTrue(build.contains("Expected exactly one FermataX $ext artifact"));
+		assertTrue(build.contains("Expected exactly one ABBAS $ext artifact"));
 		assertTrue(build.contains("jar tf \"$path\""));
-		assertTrue(build.contains("FermataX-${version}.$ext"));
+		assertTrue(build.contains("ABBAS-${version}.$ext"));
 		assertTrue(build.contains("cp \"$path\" \"$dst\""));
 		assertFalse(build.contains("-PABI="));
 		assertFalse(build.contains("package${app_flavor}Mobile"));
@@ -34,12 +34,12 @@ public class DistributionContractTest {
 		String ci = read(".github/workflows/ci.yml");
 		assertTrue(ci.contains("Verify Web-only production graph"));
 		assertTrue(ci.contains("./build.sh -d"));
-		assertTrue(ci.contains("dist/FermataX-debug-universal.apk"));
-		assertTrue(ci.contains("Upload single FermataX universal APK"));
+		assertTrue(ci.contains("dist/ABBAS-debug-universal.apk"));
+		assertTrue(ci.contains("Upload single ABBAS universal APK"));
 		assertFalse(ci.contains("./gradlew :fermata:packageAutoDebugUniversalApk"));
 		assertFalse(ci.contains(":fermata:packageMobileDebugUniversalApk"));
-		assertFalse(ci.contains("FermataX-mobile"));
-		assertFalse(ci.contains("FermataX-auto"));
+		assertFalse(ci.contains("ABBAS-mobile"));
+		assertFalse(ci.contains("ABBAS-auto"));
 	}
 
 	private static String read(String relativePath) throws Exception {

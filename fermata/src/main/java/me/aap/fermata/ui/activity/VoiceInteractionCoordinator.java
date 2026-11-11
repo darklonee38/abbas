@@ -41,6 +41,7 @@ final class VoiceInteractionCoordinator {
 	private final MainActivityDelegate activity;
 	private final VoiceSession voiceSession = new VoiceSession();
 	private final VoiceInteractionTransaction transaction = new VoiceInteractionTransaction();
+	private final VoiceFeedbackController voiceFeedback;
 	private VoiceRecognitionSession speechListener;
 	private VoiceCommandHandler commandHandler;
 	private long nextTransactionId;
@@ -49,6 +50,7 @@ final class VoiceInteractionCoordinator {
 
 	VoiceInteractionCoordinator(MainActivityDelegate activity) {
 		this.activity = activity;
+		this.voiceFeedback = new VoiceFeedbackController(activity.getContext());
 	}
 
 	void startContextualAssistant() {
@@ -196,6 +198,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void onHostPaused() {
+		voiceFeedback.stop();
 		if (speechListener != null) speechListener.destroy();
 		transaction.cancel();
 		transactionTimeout.cancel();
@@ -203,6 +206,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void close() {
+		voiceFeedback.close();
 		if (speechListener != null) speechListener.destroy();
 		voiceSession.clear();
 		transaction.cancel();
@@ -268,7 +272,13 @@ final class VoiceInteractionCoordinator {
 		else if (voiceSession.getMode() != VoiceSession.Mode.SELECTION) voiceSession.beginCommand();
 		boolean adaptiveAllowed = !textInput && (voiceSession.getMode() == VoiceSession.Mode.COMMAND);
 		startSpeechRecognizer(null, textInput, adaptiveAllowed).onSuccess(results -> {
-			if ((results == null) || results.isEmpty()) return;
+			if ((results == null) || results.isEmpty()) {
+				if (!textInput) {
+					Locale locale = Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity));
+					voiceFeedback.speak(buildRecognitionFailureFeedback(locale), locale);
+				}
+				return;
+			}
 			if (focus instanceof EditText && !global) {
 				((EditText) focus).setText(results.get(0));
 				focus.requestFocus();
@@ -278,6 +288,10 @@ final class VoiceInteractionCoordinator {
 				VoiceIntent intent = VoiceIntentParser.parse(results.get(0),
 						Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity)));
 				VoiceCommandOutcome outcome = getCommandHandler().handleWithOutcome(results, requestId);
+				Locale feedbackLocale = Locale.forLanguageTag(
+						activity.getPrefs().getVoiceControlLang(activity));
+				voiceFeedback.speak(outcome.isHandled() ? buildVoiceFeedback(intent, feedbackLocale) :
+						buildUnsupportedFeedback(feedbackLocale), feedbackLocale);
 				VoiceRecognitionSession current = speechListener;
 				if (current != null) current.applyCommandOutcome(outcome);
 				if (requestId != 0L) {
@@ -306,7 +320,7 @@ final class VoiceInteractionCoordinator {
 		}).onFailure(error -> {
 			if (!isCancellation(error)) Log.e(error, "Failed to request RECORD_AUDIO permission");
 			showAlert(activity.getContext(), R.string.err_no_audio_record_perm);
-		}).then(ignored -> SpeechRecognitionSupport.requireRecognitionService(activity.getContext()))
+		}).then(ignored -> SpeechRecognitionSupport.requireOnDeviceRecognitionService(activity.getContext()))
 				.then(ignored -> {
 					if (speechListener != null) speechListener.destroy();
 					Promise<List<String>> promise = new Promise<>();
@@ -322,13 +336,72 @@ final class VoiceInteractionCoordinator {
 						intent.putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION, true);
 						intent.putStringArrayListExtra(
 								RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES,
-								new ArrayList<>(List.of("en-US", "vi-VN")));
+								new ArrayList<>(List.of("en-US", "tr-TR", "vi-VN")));
 					}
 					speechListener = new VoiceRecognitionSession(activity, promise, textInput,
 							adaptiveAllowed, voiceSession.getMode() == VoiceSession.Mode.SELECTION);
 					speechListener.start(intent);
 					return promise;
 				});
+	}
+
+	private String buildRecognitionFailureFeedback(Locale locale) {
+		return switch (locale.getLanguage()) {
+			case "tr" -> "Sizi anlayamadım. Tekrar deneyin.";
+			case "vi" -> "Tôi chưa nghe rõ. Vui lòng thử lại.";
+			default -> "I didn't catch that. Please try again.";
+		};
+	}
+
+	private String buildUnsupportedFeedback(Locale locale) {
+		return switch (locale.getLanguage()) {
+			case "tr" -> "Bu komutu henüz desteklemiyorum.";
+			case "vi" -> "Lệnh này hiện chưa được hỗ trợ.";
+			default -> "That command is not supported yet.";
+		};
+	}
+
+	private String buildVoiceFeedback(@Nullable VoiceIntent intent, Locale locale) {
+		String language = locale.getLanguage();
+		boolean turkish = "tr".equals(language);
+		boolean vietnamese = "vi".equals(language);
+		if (intent == null) {
+			return turkish ? "Komut tamamlandı." :
+					vietnamese ? "Đã hoàn thành lệnh." : "Command completed.";
+		}
+		return switch (intent.getKind()) {
+			case SELECTION -> turkish ? "Seçiminiz alındı." :
+					vietnamese ? "Đã nhận lựa chọn." : "Selection received.";
+			case OPEN_ADDON -> turkish ? "İçerik bölümü açılıyor." :
+					vietnamese ? "Đang mở mục nội dung." : "Opening the content section.";
+			case ADDON_SEARCH -> {
+				String query = intent.getQuery();
+				String prefix = switch (intent.getSearchAction()) {
+					case PLAY -> turkish ? "Oynatmak için aranıyor: " :
+							vietnamese ? "Đang tìm để phát: " : "Searching to play: ";
+					case FIND -> turkish ? "Aranıyor: " :
+							vietnamese ? "Đang tìm: " : "Searching: ";
+					case OPEN -> turkish ? "Açılıyor: " :
+							vietnamese ? "Đang mở: " : "Opening: ";
+				};
+				yield prefix + ((query == null) ? " " : query);
+			}
+			case PLAYBACK -> switch (intent.getPlaybackAction()) {
+				case PLAY -> turkish ? "Oynatılıyor." : vietnamese ? "Đang phát." : "Playing.";
+				case PAUSE -> turkish ? "Duraklatıldı." : vietnamese ? "Đã tạm dừng." : "Paused.";
+				case STOP -> turkish ? "Durduruldu." : vietnamese ? "Đã dừng." : "Stopped.";
+				case NEXT -> turkish ? "Sonraki içeriğe geçiliyor." :
+						vietnamese ? "Chuyển sang nội dung tiếp theo." : "Skipping to the next item.";
+				case PREVIOUS -> turkish ? "Önceki içeriğe geçiliyor." :
+						vietnamese ? "Quay lại nội dung trước." : "Going to the previous item.";
+				case BACK -> turkish ? "Geri dönülüyor." :
+						vietnamese ? "Đang quay lại." : "Going back.";
+				case OPEN_CURRENT -> turkish ? "Şu anki içerik açılıyor." :
+						vietnamese ? "Đang mở nội dung hiện tại." : "Opening the current item.";
+				case PLAY_FAVORITES -> turkish ? "Favoriler oynatılıyor." :
+						vietnamese ? "Đang phát mục yêu thích." : "Playing your favorites.";
+			};
+		};
 	}
 
 	private VoiceCommandHandler getCommandHandler() {
