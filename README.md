@@ -1,33 +1,33 @@
-# Mola
+# ABBAS
 
 _Eski adı: Dem TV._
 
 TV/IPTV izleme, YouTube, tarayıcı ve izinle ekran yansıtma için Türkçe Android uygulaması.
 
-[APK indirme ve kurulum sayfası](https://dem-tv-indir.chirpypeach128.chatgpt.site) · [**2.1.7 APK’sını indir**](https://media.githubusercontent.com/media/moris545454/araba-/main/distribution/FermataX-yeni-arayuz-debug.apk) · [Kurulum rehberi](KURULUM_REHBERI_TR.md) · [Güvenlik kapsamı](GUVENLIK_NOTLARI_TR.md) · [Sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
+[APK indirme ve kurulum sayfası](https://github.com/darklonee38/abbas/releases) · [**2.1.7 APK’sını indir**](https://media.githubusercontent.com/media/darklonee38/abbas/main/distribution/ABBAS-universal.apk) · [Kurulum rehberi](KURULUM_REHBERI_TR.md) · [Güvenlik kapsamı](GUVENLIK_NOTLARI_TR.md) · [Sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
 
 ## Sürüm durumu
 
-> **ÖNEMLİ:** Önce Mola’yı kurun. Kurulumdan sonra Android Auto’da görünmüyorsa [bu videodaki](https://www.youtube.com/watch?v=CdU0OlLds2k) işlemleri uygulayın (Shizuku kurulum rehberi). Ardından Mola’yı [KingInstaller](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk) uygulamasıyla Shizuku seçeneği açıkken tekrar yükleyin; Android Auto’da çalışacaktır ❤
+> **ÖNEMLİ:** Önce ABBAS’yı kurun. Kurulumdan sonra Android Auto’da görünmüyorsa [bu videodaki](https://www.youtube.com/watch?v=CdU0OlLds2k) işlemleri uygulayın (Shizuku kurulum rehberi). Ardından ABBAS’yı [KingInstaller](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk) uygulamasıyla Shizuku seçeneği açıkken tekrar yükleyin; Android Auto’da çalışacaktır ❤
 
-**Mola 2.2.2** — [APK’yı indir](https://media.githubusercontent.com/media/moris545454/araba-/main/distribution/Mola.apk) · [sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
+**ABBAS 2.2.2** — [APK’yı indir](https://media.githubusercontent.com/media/darklonee38/abbas/main/distribution/ABBAS.apk) · [sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
 
 - Ana sayfada **Favori Kanallar** rafı ve kendi web sitelerinizi ekleyebileceğiniz **Kısayol ekle** kartı.
 - **Bildirimsiz ve arka plan güncellemesiz:** veriler yalnızca uygulama kullanılırken güncellenir.
-- **Sesli karşılama** (isteğe bağlı): araca bağlanınca “Günaydın, Mola’ya hoş geldin” karşılaması.
+- **Sesli karşılama** (isteğe bağlı): araca bağlanınca “Günaydın, ABBAS’ya hoş geldin” karşılaması.
 - Ana sayfada **Podcast**: arama, abone olma, bölüm dinleme ve kaldığı yerden devam.
 - **Direksiyon tuşları**: ileri/geri tuşlarıyla kanal, istasyon veya bölüm değiştirme.
 - Ana sayfada **Radyo**: Türk radyoları, Popüler, En çok oy alan, Ülkeler, Etiketler ve kendi radyo akışını ekleme; araçta radyo oynatıcı çubuğuyla çalışır.
 - TV listesinde varsayılan **Türk radyoları** listesi (Radio Browser dizini).
 - TV ana listesinde **+** düğmesiyle kendi M3U/IPTV listenizi ekleme; düğme yalnızca bu ekranda bulunur.
 
-2.1.7 ve sonrası yeni bir imza anahtarıyla derlenir; telefonda daha eski bir Mola kuruluysa önce onu kaldırın. Fiziksel telefon ve araç testi yapılmadı.
+2.1.7 ve sonrası yeni bir imza anahtarıyla derlenir; telefonda daha eski bir ABBAS kuruluysa önce onu kaldırın. Fiziksel telefon ve araç testi yapılmadı.
 
 2.1.4, kullanıcıların TV/YouTube açarken kapanma bildirmesi üzerine kararlı sürüm listesinden geri çekildi. **Kullanıcı 2.1.5’in çalıştığını bildirdi; normal kurulumla Android Auto’da görünmediği de bildirildi.** KingInstaller ile araç doğrulaması beklenmektedir; sürüm ön sürüm olarak kalır. Kapanmanın kesin nedeni cihaz hata kaydı olmadan doğrulanmış sayılmaz. Ön sürüm otomatik güncelleme olarak önerilmez.
 
 ## Kapsam
 
-Ana sayfada TV, YouTube ve ekran yansıtma ana kartları; tarayıcı, WindAsist ve Mola web kısayolları bulunur. Uygulama sayfalarında ana sayfaya dönüş korunur. Yan kısayollar varsayılan olarak gizlidir; ayarlardan açılır.
+Ana sayfada TV, YouTube ve ekran yansıtma ana kartları; tarayıcı, WindAsist ve ABBAS web kısayolları bulunur. Uygulama sayfalarında ana sayfaya dönüş korunur. Yan kısayollar varsayılan olarak gizlidir; ayarlardan açılır.
 
 TV’nin varsayılan M3U kaynağı https://onureroz.com/indirmeler/turk/index.m3u adresidir; yanında Radio Browser dizininden en çok oy alan Türk radyolarının listesi bulunur. Kullanıcı TV ana listesindeki + düğmesiyle kaynak ekleyebilir, uzun basarak silebilir; silinen varsayılan listeler aynı menüden geri yüklenir. HLS, DASH ve diğer IPTV biçimlerini oynatmak için ExoPlayer/VLC motorları korunmuştur. Radyo (Radio Browser dizini) ve Podcast eklentileri APK’dadır. Sesli kitap, Stremio, sohbet, Cast, Google Drive, SMB ve SFTP eklentileri APK’ya derlenmez. Kamera, mikrofon, konum ve genel medya/dosya okuma izinleri kaldırılmıştır.
 
@@ -54,4 +54,4 @@ Eski kurulumların güncellenmesi için paket kimliği ve imza korunur. Dağıt�
 
 ## Lisans ve kaynak
 
-Mola, [Fermata Media Player](https://github.com/AndreyPavlenko/Fermata) ve FermataX kaynaklarından türetilmiş GPL-3.0 projesidir. Andrey Pavlenko ve diğer katkıcıların telif/lisans bildirimleri korunur. Kaldırılan özelliklerin kaynak geçmişi Git’te bulunabilir; bu onların dağıtılan APK’da bulunduğu anlamına gelmez. [Lisans](LICENSE).
+ABBAS, [Fermata Media Player](https://github.com/AndreyPavlenko/Fermata) ve FermataX kaynaklarından türetilmiş GPL-3.0 projesidir. Andrey Pavlenko ve diğer katkıcıların telif/lisans bildirimleri korunur. Kaldırılan özelliklerin kaynak geçmişi Git’te bulunabilir; bu onların dağıtılan APK’da bulunduğu anlamına gelmez. [Lisans](LICENSE).
