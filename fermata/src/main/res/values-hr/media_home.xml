@@ -1,0 +1,8 @@
+<resources>
+    <string name="dashboard_mirror_title">Zrcaljenje zaslona</string>
+    <string name="dashboard_mirror_sub">Prikaži zaslon telefona</string>
+    <string name="dashboard_recent_shelf">Nedavni sadržaji</string>
+    <string name="dashboard_recent_empty">Ovdje će se pojaviti sadržaji koje reproducirate.</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+</resources>

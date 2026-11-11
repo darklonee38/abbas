@@ -1,0 +1,9 @@
+<resources>
+    <item name="dashboard_mirror_action" type="id" />
+    <string name="dashboard_mirror_title">Screen mirroring</string>
+    <string name="dashboard_mirror_sub">Your phone on Android Auto</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_recent_shelf">Recent content</string>
+    <string name="dashboard_recent_empty">Your played content will appear here.</string>
+</resources>

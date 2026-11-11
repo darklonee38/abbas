@@ -1,0 +1,8 @@
+<resources>
+    <string name="dashboard_mirror_title">Phản chiếu màn hình</string>
+    <string name="dashboard_mirror_sub">Hiển thị màn hình điện thoại</string>
+    <string name="dashboard_recent_shelf">Nội dung gần đây</string>
+    <string name="dashboard_recent_empty">Nội dung đã phát sẽ xuất hiện ở đây.</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="dashboard_mirror_title">ការឆ្លុះអេក្រង់</string>
+    <string name="dashboard_mirror_sub">បង្ហាញអេក្រង់ទូរសព្ទ</string>
+    <string name="dashboard_recent_shelf">មាតិកាថ្មីៗ</string>
+    <string name="dashboard_recent_empty">មាតិកាដែលអ្នកបានចាក់នឹងបង្ហាញនៅទីនេះ។</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+</resources>

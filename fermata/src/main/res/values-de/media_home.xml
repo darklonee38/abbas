@@ -1,0 +1,8 @@
+<resources>
+    <string name="dashboard_mirror_title">Bildschirmspiegelung</string>
+    <string name="dashboard_mirror_sub">Telefonbildschirm anzeigen</string>
+    <string name="dashboard_recent_shelf">Letzte Inhalte</string>
+    <string name="dashboard_recent_empty">Hier erscheinen Ihre abgespielten Inhalte.</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+</resources>

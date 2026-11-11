@@ -1,0 +1,8 @@
+<resources>
+    <string name="dashboard_mirror_title">Duplica schermo</string>
+    <string name="dashboard_mirror_sub">Mostra lo schermo del telefono</string>
+    <string name="dashboard_recent_shelf">Contenuti recenti</string>
+    <string name="dashboard_recent_empty">Qui appariranno i contenuti riprodotti.</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+</resources>

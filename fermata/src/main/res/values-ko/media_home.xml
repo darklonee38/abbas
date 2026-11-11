@@ -1,0 +1,8 @@
+<resources>
+    <string name="dashboard_mirror_title">화면 미러링</string>
+    <string name="dashboard_mirror_sub">휴대전화 화면 표시</string>
+    <string name="dashboard_recent_shelf">최근 콘텐츠</string>
+    <string name="dashboard_recent_empty">재생한 콘텐츠가 여기에 표시됩니다.</string>
+    <string name="dashboard_mirror_help">@string/dem_mirror_connect</string>
+    <string name="dashboard_mirror_mobile_help">@string/dem_mirror_connect</string>
+</resources>
