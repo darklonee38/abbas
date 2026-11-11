@@ -100,7 +100,7 @@ public final class GithubUpdater {
         HttpURLConnection connection = (HttpURLConnection) new URL(address).openConnection();
         connection.setConnectTimeout(15_000);
         connection.setReadTimeout(30_000);
-        connection.setRequestProperty("User-Agent", "FermataX/" + BuildConfig.VERSION_NAME);
+        connection.setRequestProperty("User-Agent", "ABBAS/" + BuildConfig.VERSION_NAME);
         connection.setRequestProperty("Accept", "application/vnd.github+json");
         if (connection.getResponseCode() != 200) {
             connection.disconnect();
