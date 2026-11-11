@@ -15,7 +15,7 @@ public final class VoiceIntentParser {
 	private static final Map<String, String> ADDON_ALIASES = new LinkedHashMap<>();
 
 	static {
-		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube\'da");
+		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube'da", "youtube’dan", "youtube'dan");
 		alias("tv", "tv", "tv'de", "tv’de", "televizyonda", "televizyondan", "iptv", "iptv'de", "iptv’de",
 				"television", "tivi", "truyền hình", "truyen hinh", "xtream", "xtreme", "televizyon");
 		alias("radio", "radio", "radio'da", "radio’da", "đài", "dai", "radyo", "radyo'da", "radyo’da");
