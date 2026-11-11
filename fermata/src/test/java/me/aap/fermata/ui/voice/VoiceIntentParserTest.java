@@ -27,6 +27,10 @@ public class VoiceIntentParserTest {
 		Locale tr = Locale.forLanguageTag("tr");
 		assertEquals(VoiceIntent.PlaybackAction.PAUSE, VoiceIntentParser.parse("duraklat", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.NEXT, VoiceIntentParser.parse("sonraki kanal", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.NEXT, VoiceIntentParser.parse("sonraki şarkı", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PREVIOUS, VoiceIntentParser.parse("önceki şarkı", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PLAY_FAVORITES, VoiceIntentParser.parse("favorilerimi aç", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PLAY, VoiceIntentParser.parse("çal", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.BACK, VoiceIntentParser.parse("geri dön", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.PLAY_FAVORITES, VoiceIntentParser.parse("favorilerimi oynat", tr).getPlaybackAction());
 		assertEquals(1, VoiceIntentParser.parse("ikinci sonuç", tr).getSelectionIndex());
