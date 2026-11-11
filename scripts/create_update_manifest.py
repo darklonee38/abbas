@@ -20,7 +20,7 @@ metadata = {
     'versionName': version,
     'packageId': 'me.app.fermataX.auto.debug',
     'minSdkVersion': int(re.search(r'sdkMin = "(\d+)"', versions).group(1)),
-    'apkAsset': 'FermataX-yeni-arayuz-debug.apk',
+    'apkAsset': 'ABBAS-universal.apk',
     'sha256': checksum,
     'size': apk.stat().st_size,
 }
