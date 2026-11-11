@@ -65,9 +65,10 @@ public final class VoiceIntentParser {
 		// Turkish commonly places the verb after the content: "YouTube aç", "TV TRT 1 oynat".
 		// Keep an already explicit action prefix intact, including English queries ending in a Turkish verb.
 		if (locale != null && "tr".equals(locale.getLanguage()) && parseSearchAction(text) == null && !text.startsWith("altyazı")) {
-			for (String verb : new String[]{"aç", "oynat", "ara", "bul"}) {
+			for (String verb : new String[]{"aç", "oynat", "ara", "bul", "izle", "seyret", "dinle"}) {
 				if (text.endsWith(" " + verb)) {
-					text = verb + " " + text.substring(0, text.length() - verb.length()).trim();
+					String action = ("izle".equals(verb) || "seyret".equals(verb) || "dinle".equals(verb)) ? "oynat" : verb;
+					text = action + " " + text.substring(0, text.length() - verb.length()).trim();
 					break;
 				}
 			}
