@@ -47,6 +47,22 @@ public class VoicePipelineIntegrationTest {
 		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, youtube.getKind());
 		assertEquals("youtube", youtube.getAddon());
 		assertEquals("haber", youtube.getQuery());
+
+		VoiceIntent openIptv = VoiceIntentParser.parse("IPTV aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openIptv.getKind());
+		assertEquals("tv", openIptv.getAddon());
+
+		VoiceIntent openRadio = VoiceIntentParser.parse("radyo aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openRadio.getKind());
+		assertEquals("radio", openRadio.getAddon());
+
+		VoiceIntent openPodcast = VoiceIntentParser.parse("podcast aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openPodcast.getKind());
+		assertEquals("podcast", openPodcast.getAddon());
+
+		VoiceIntent openYoutube = VoiceIntentParser.parse("YouTube aç", turkish);
+		assertEquals(VoiceIntent.Kind.OPEN_ADDON, openYoutube.getKind());
+		assertEquals("youtube", openYoutube.getAddon());
 	}
 
 	@Test
