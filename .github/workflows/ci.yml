@@ -44,6 +44,9 @@ jobs:
             build-tools;36.0.0
             ndk;29.0.14206865
 
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v6
         with:
