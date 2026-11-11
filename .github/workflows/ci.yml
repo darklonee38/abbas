@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Verify FermataX source, lint, architecture, and universal package
+    name: Verify ABBAS source, lint, architecture, and universal package
     runs-on: ubuntu-latest
     timeout-minutes: 75
     env:
@@ -126,27 +126,27 @@ jobs:
           git diff --check "$base_sha...HEAD"
 
       # NON-NEGOTIABLE DISTRIBUTION CONTRACT:
-      # FermataX ships exactly ONE universal APK used on both phone and Android Auto/DHU.
+      # ABBAS ships exactly ONE universal APK used on both phone and Android Auto/DHU.
       # Mobile/Auto are internal source sets/test targets only and must never become separate
       # user-facing APKs, releases, or CI artifacts.
-      - name: Package single FermataX universal APK
+      - name: Package single ABBAS universal APK
         if: ${{ success() }}
         shell: bash
         run: |
           set -euo pipefail
           ./build.sh -d
-          mapfile -t apks < <(find dist -maxdepth 1 -type f -name 'FermataX-*.apk' -print)
+          mapfile -t apks < <(find dist -maxdepth 1 -type f -name 'ABBAS-*.apk' -print)
           if [ "${#apks[@]}" -ne 1 ]; then
             echo "Expected exactly one universal APK, found ${#apks[@]}"
             exit 1
           fi
-          cp "${apks[0]}" dist/FermataX-debug-universal.apk
+          cp "${apks[0]}" dist/ABBAS-debug-universal.apk
 
-      - name: Upload single FermataX universal APK
+      - name: Upload single ABBAS universal APK
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
-          name: FermataX-device-test-${{ github.sha }}
-          path: dist/FermataX-debug-universal.apk
+          name: ABBAS-device-test-${{ github.sha }}
+          path: dist/ABBAS-debug-universal.apk
           if-no-files-found: error
           retention-days: 7
