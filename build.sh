@@ -45,9 +45,8 @@ echo "CMAKE_PATH=$CMAKE_PATH"
 export PATH=$CMAKE_PATH:$PATH
 cd "$DIR"
 
-# Distribution contract: FermataX is one app/package for phone and Android Auto.
-# Gradle keeps its platform source sets internally, but this script must never publish
-# separate Mobile/Auto or ABI-specific APK products. APK builds are one universal package.
+# ABBAS is one app/package for phone and Android Auto.
+# APK builds publish exactly one universal package, never separate Mobile/Auto or ABI-specific products.
 build() {
   local ext="$TASK"
   local app_flavor=${APP_ID_SFX:-$(grep -oP "${TASK}Flavor=\K.+" "$DIR/local.properties"  2>/dev/null || true)}
@@ -61,17 +60,16 @@ build() {
     local output_root="fermata/build/outputs/bundle"
   fi
 
-  # Remove stale artifacts from this packaging family so an old build can never overwrite
-  # the newly produced universal package in dist/.
+  # Remove stale ABBAS artifacts so an old build cannot be mistaken for the new output.
   if [ -d "$output_root" ]; then
-    find "$output_root" -type f -name "fermata*.$ext" -delete
+    find "$output_root" -type f -name "abbas*.$ext" -delete
   fi
 
   ./gradlew $CLEAN verifyWebOnlyProductionGraph fermata:$task $app_sfx
 
-  set -- $(find "$output_root" -type f -name "fermata*.$ext" -print)
+  set -- $(find "$output_root" -type f -name "abbas*.$ext" -print)
   if [ "$#" -ne 1 ]; then
-    echo "Expected exactly one FermataX $ext artifact, found $#"
+    echo "Expected exactly one ABBAS $ext artifact, found $#"
     exit 1
   fi
 
@@ -86,9 +84,9 @@ build() {
       exit 1
     fi
   fi
-  local version=${path##*fermata-}
+  local version=${path##*abbas-}
   version=${version%%-*}
-  local dst="$DEST_DIR/FermataX-${version}.$ext"
+  local dst="$DEST_DIR/ABBAS-${version}.$ext"
   cp "$path" "$dst"
   echo "Built $dst"
 }

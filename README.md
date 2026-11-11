@@ -4,13 +4,13 @@ _Eski adı: Dem TV._
 
 TV/IPTV izleme, YouTube, tarayıcı ve izinle ekran yansıtma için Türkçe Android uygulaması.
 
-[APK indirme ve kurulum sayfası](https://github.com/darklonee38/abbas/releases) · [**En son ABBAS APK’sını indir**](https://github.com/darklonee38/abbas/releases/latest) · [Kurulum rehberi](KURULUM_REHBERI_TR.md) · [Güvenlik kapsamı](GUVENLIK_NOTLARI_TR.md) · [Sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
+[APK indirme ve kurulum sayfası](https://github.com/darklonee38/abbas/releases) · [**En son ABBAS APK’sını indir**](https://github.com/darklonee38/abbas/releases/latest) · [Lisans](LICENSE) · [Üçüncü taraf bildirimleri](THIRD_PARTY_NOTICES.md)
 
 ## Sürüm durumu
 
 > **ÖNEMLİ:** Önce ABBAS’yı kurun. Kurulumdan sonra Android Auto’da görünmüyorsa [bu videodaki](https://www.youtube.com/watch?v=CdU0OlLds2k) işlemleri uygulayın (Shizuku kurulum rehberi). Ardından ABBAS’yı [KingInstaller](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk) uygulamasıyla Shizuku seçeneği açıkken tekrar yükleyin; Android Auto’da çalışacaktır ❤
 
-**ABBAS — ilk yeniden markalanmış sürüm bekleniyor** — [APK’yı indir](https://github.com/darklonee38/abbas/releases/latest) · [sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
+**ABBAS — ilk yeniden markalanmış sürüm bekleniyor** — [APK’yı indir](https://github.com/darklonee38/abbas/releases/latest)
 
 - Ana sayfada **Favori Kanallar** rafı ve kendi web sitelerinizi ekleyebileceğiniz **Kısayol ekle** kartı.
 - **Bildirimsiz ve arka plan güncellemesiz:** veriler yalnızca uygulama kullanılırken güncellenir.
@@ -35,7 +35,7 @@ Ekran yansıtma Android’in MediaProjection iznini ister. Android Auto telefon 
 
 ## Android Auto
 
-APK’da KingInstaller bağımlılığı, kurulum kaynağını taklit eden kod, erişilebilirlik servisi, root veya Xposed yoktur. Telefona standart Android yükleyicisiyle kurulabilir; Android Auto’da görünmeyen kurulumlar için [KingInstaller 2.3 üzerinden kurulum](KURULUM_REHBERI_TR.md) rehberini izleyin. KingInstaller ayrı bir üçüncü taraf yükleyicidir. [Resmî APK indirme](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk). **Bu, her telefonda Android Auto’nun uygulamayı kabul edeceği anlamına gelmez.** Özel video/tarayıcı/yansıtma arayüzü eski projection SDK’sını kullanır; Google’ın dağıtım kuralları, telefon ve Android Auto sürümü görünürlüğü belirler. Google onayı veya bütün yeni Android sürümlerinde sorunsuz çalışma garantisi verilmez.
+APK’da KingInstaller bağımlılığı, kurulum kaynağını taklit eden kod, erişilebilirlik servisi, root veya Xposed yoktur. Telefona standart Android yükleyicisiyle kurulabilir; Android Auto’da görünmeyen kurulumlar için KingInstaller 2.3 üzerinden kurulum yöntemi kullanılabilir. KingInstaller ayrı bir üçüncü taraf yükleyicidir. [Resmî APK indirme](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk). **Bu, her telefonda Android Auto’nun uygulamayı kabul edeceği anlamına gelmez.** Özel video/tarayıcı/yansıtma arayüzü eski projection SDK’sını kullanır; Google’ın dağıtım kuralları, telefon ve Android Auto sürümü görünürlüğü belirler. Google onayı veya bütün yeni Android sürümlerinde sorunsuz çalışma garantisi verilmez.
 
 ## Doğrulama ve derleme
 
@@ -50,7 +50,7 @@ Java 21, Android SDK 36 ve Gradle wrapper ile:
 python3 scripts/verify_security_apk.py /path/to/app.apk --aapt /path/to/aapt
 ```
 
-Eski kurulumların güncellenmesi için paket kimliği ve imza korunur. Dağıtım varyantı dosya adında `debug` taşısa da APK `debuggable=false` olarak paketlenir. Yayın sertifikasının özel anahtarı depoya konmaz. [Teknik bağlam](MASTER_CONTEXT.md) ve [yayın süreci](GITHUB_UPDATES_TR.md).
+Eski kurulumların güncellenmesi için paket kimliği ve imza korunur. Dağıtım varyantı dosya adında `debug` taşısa da APK `debuggable=false` olarak paketlenir. Yayın sertifikasının özel anahtarı depoya konmaz.
 
 ## Lisans ve kaynak
 
