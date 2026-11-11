@@ -4,13 +4,13 @@ _Eski adı: Dem TV._
 
 TV/IPTV izleme, YouTube, tarayıcı ve izinle ekran yansıtma için Türkçe Android uygulaması.
 
-[APK indirme ve kurulum sayfası](https://github.com/darklonee38/abbas/releases) · [**2.1.7 APK’sını indir**](https://media.githubusercontent.com/media/darklonee38/abbas/main/distribution/ABBAS-universal.apk) · [Kurulum rehberi](KURULUM_REHBERI_TR.md) · [Güvenlik kapsamı](GUVENLIK_NOTLARI_TR.md) · [Sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
+[APK indirme ve kurulum sayfası](https://github.com/darklonee38/abbas/releases) · [**En son ABBAS APK’sını indir**](https://github.com/darklonee38/abbas/releases/latest) · [Kurulum rehberi](KURULUM_REHBERI_TR.md) · [Güvenlik kapsamı](GUVENLIK_NOTLARI_TR.md) · [Sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
 
 ## Sürüm durumu
 
 > **ÖNEMLİ:** Önce ABBAS’yı kurun. Kurulumdan sonra Android Auto’da görünmüyorsa [bu videodaki](https://www.youtube.com/watch?v=CdU0OlLds2k) işlemleri uygulayın (Shizuku kurulum rehberi). Ardından ABBAS’yı [KingInstaller](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk) uygulamasıyla Shizuku seçeneği açıkken tekrar yükleyin; Android Auto’da çalışacaktır ❤
 
-**ABBAS 2.2.2** — [APK’yı indir](https://media.githubusercontent.com/media/darklonee38/abbas/main/distribution/ABBAS.apk) · [sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
+**ABBAS — ilk yeniden markalanmış sürüm bekleniyor** — [APK’yı indir](https://github.com/darklonee38/abbas/releases/latest) · [sürüm notları](UPDATE_RELEASE_NOTES_TR.md)
 
 - Ana sayfada **Favori Kanallar** rafı ve kendi web sitelerinizi ekleyebileceğiniz **Kısayol ekle** kartı.
 - **Bildirimsiz ve arka plan güncellemesiz:** veriler yalnızca uygulama kullanılırken güncellenir.
