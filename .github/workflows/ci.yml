@@ -72,36 +72,9 @@ jobs:
         if: ${{ !cancelled() }}
         run: ./gradlew testAutoDebugUnitTest --no-daemon --no-parallel --stacktrace
 
-      - name: Web addon UI shell guard
-        if: ${{ !cancelled() }}
-        run: >-
-          ./gradlew :fermata:testMobileDebugUnitTest
-          --tests me.aap.fermata.architecture.ArchitectureBoundaryTest.webAddonUsesCommonUiShellAuthorities
-          --no-daemon --no-parallel --stacktrace
-
-      - name: TV addon UI shell guard
-        if: ${{ !cancelled() }}
-        run: >-
-          ./gradlew :fermata:testMobileDebugUnitTest
-          --tests me.aap.fermata.architecture.ArchitectureBoundaryTest.tvAddonUsesCommonUiShellAuthorities
-          --no-daemon --no-parallel --stacktrace
-
-      - name: UI shell single-writer guard
-        if: ${{ !cancelled() }}
-        run: >-
-          ./gradlew :fermata:testMobileDebugUnitTest
-          --tests me.aap.fermata.architecture.UiShellArchitectureGuardTest
-          --no-daemon --no-parallel --stacktrace
-
-      - name: Architecture boundary guards
-        if: ${{ !cancelled() }}
-        run: >-
-          ./gradlew :fermata:testMobileDebugUnitTest
-          --tests me.aap.fermata.architecture.ArchitectureBoundaryTest.hotspotClassesCannotGrowPastTheRecordedBaseline
-          --tests me.aap.fermata.architecture.ArchitectureBoundaryTest.coreDoesNotImportConcreteAddonImplementations
-          --tests me.aap.fermata.architecture.ArchitectureBoundaryTest.coreUiDoesNotReferenceConcreteAddonFragmentTypes
-          --tests me.aap.fermata.architecture.ArchitectureBoundaryTest.addonModulesDoNotImportSiblingImplementations
-          --no-daemon --no-parallel --stacktrace
+      # The complete Mobile and Auto unit suites above already execute the
+      # focused UI-shell and architecture guard tests; do not rerun the same
+      # test task once per class, which only adds Gradle startup overhead.
 
       - name: Lint
         if: ${{ !cancelled() }}
