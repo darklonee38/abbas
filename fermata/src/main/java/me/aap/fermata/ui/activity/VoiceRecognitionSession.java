@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.OperationCanceledException;
 import android.speech.RecognitionListener;
@@ -63,7 +65,11 @@ final class VoiceRecognitionSession implements RecognitionListener,
 		this.textInput = textInput;
 		this.adaptiveAllowed = adaptiveAllowed;
 		this.selectionMode = selectionMode;
-		recognizer = SpeechRecognizer.createSpeechRecognizer(activity.getContext());
+		if (VERSION.SDK_INT < VERSION_CODES.S ||
+				!SpeechRecognizer.isOnDeviceRecognitionAvailable(activity.getContext())) {
+			throw new IllegalStateException("On-device speech recognition is not available");
+		}
+		recognizer = SpeechRecognizer.createOnDeviceSpeechRecognizer(activity.getContext());
 		recognizer.setRecognitionListener(this);
 		text = new MaterialTextView(activity.getContext());
 		controller = new VoiceRecognitionController(VoiceEndpointPolicy.DEFAULT, this);
