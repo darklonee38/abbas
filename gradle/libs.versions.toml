@@ -19,8 +19,6 @@ ndkVersion = "29.0.14206865"
 androidxAnnotation = "1.10.0"
 androidxAppcompat = "1.7.1"
 androidxConstraintlayout = "2.2.1"
-androidxCore = "1.19.0"
-androidxFragment = "1.8.9"
 androidxLegacySupport = "1.0.0"
 androidxLocalbroadcastmanager = "1.1.0"
 androidxMedia = "1.8.0"
@@ -41,7 +39,6 @@ googlePlayFeatureDelivery = "2.1.0"
 googlePlayAppUpdate = "2.1.0"
 googlePlayServicesAuth = "21.6.0"
 googlePlayServicesBase = "18.10.0"
-googlePlayServicesCast = "22.3.1"
 
 # Google APIs
 googleHttpClientGson = "2.1.0"
@@ -56,7 +53,6 @@ transportBackendCct = "4.1.1"
 transportRuntime = "4.1.1"
 
 # Guava
-guava = "33.6.0-android"
 
 # Networking
 jsch = "2.28.2"
@@ -87,8 +83,6 @@ androidxTestEspresso = "3.7.0"
 androidxAnnotation                = { group = "androidx.annotation",               name = "annotation",                    version.ref = "androidxAnnotation" }
 androidxAppcompat                 = { group = "androidx.appcompat",                 name = "appcompat",                     version.ref = "androidxAppcompat" }
 androidxConstraintlayout          = { group = "androidx.constraintlayout",          name = "constraintlayout",              version.ref = "androidxConstraintlayout" }
-androidxCore                      = { group = "androidx.core",                      name = "core",                          version.ref = "androidxCore" }
-androidxFragment                  = { group = "androidx.fragment",                  name = "fragment",                      version.ref = "androidxFragment" }
 androidxLegacySupportCore         = { group = "androidx.legacy",                    name = "legacy-support-core-utils",     version.ref = "androidxLegacySupport" }
 androidxLocalbroadcastmanager     = { group = "androidx.localbroadcastmanager",     name = "localbroadcastmanager",         version.ref = "androidxLocalbroadcastmanager" }
 androidxMedia                     = { group = "androidx.media",                     name = "media",                         version.ref = "androidxMedia" }
@@ -113,7 +107,6 @@ googlePlayFeatureDelivery         = { group = "com.google.android.play",        
 googlePlayAppUpdate               = { group = "com.google.android.play",            name = "app-update",                    version.ref = "googlePlayAppUpdate" }
 googlePlayServicesAuth            = { group = "com.google.android.gms",             name = "play-services-auth",            version.ref = "googlePlayServicesAuth" }
 googlePlayServicesBase            = { group = "com.google.android.gms",             name = "play-services-base",            version.ref = "googlePlayServicesBase" }
-googlePlayServicesCast            = { group = "com.google.android.gms",             name = "play-services-cast-framework",  version.ref = "googlePlayServicesCast" }
 
 # Google APIs
 googleHttpClientGson              = { group = "com.google.http-client",             name = "google-http-client-gson",       version.ref = "googleHttpClientGson" }
@@ -128,7 +121,6 @@ transportBackendCct               = { group = "com.google.android.datatransport"
 transportRuntime                  = { group = "com.google.android.datatransport",   name = "transport-runtime",             version.ref = "transportRuntime" }
 
 # Guava
-guava                             = { group = "com.google.guava",                   name = "guava",                         version.ref = "guava" }
 
 # Networking
 jsch                              = { group = "com.github.mwiede",                  name = "jsch",                          version.ref = "jsch" }
