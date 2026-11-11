@@ -17,7 +17,7 @@ android {
         applicationId configuredApplicationId
         versionCode VERSION_CODE
         versionName VERSION_NAME
-        base.archivesName = "fermata-$versionName-$artifactIdentity"
+        base.archivesName = "abbas-$versionName-$artifactIdentity"
         buildConfigField "boolean", 'YT_AUDIO_RESTORE', "${youtubeAudioRestoreEnabled}"
         buildConfigField "boolean", 'YT_DIAGNOSTICS', "${youtubeDiagnosticsEnabled}"
 
