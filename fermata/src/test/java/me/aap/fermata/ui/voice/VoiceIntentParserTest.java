@@ -46,6 +46,22 @@ public class VoiceIntentParserTest {
 	}
 
 	@Test
+	public void parsesNaturalTurkishWatchAndListenCommands() {
+		Locale tr = Locale.forLanguageTag("tr");
+
+		VoiceIntent youtube = VoiceIntentParser.parse("YouTube'da İstanbul belgeseli izle", tr);
+		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, youtube.getKind());
+		assertEquals(VoiceIntent.SearchAction.PLAY, youtube.getSearchAction());
+		assertEquals("youtube", youtube.getAddon());
+		assertEquals("istanbul belgeseli", youtube.getQuery());
+
+		VoiceIntent radio = VoiceIntentParser.parse("Radyo jazz dinle", tr);
+		assertEquals(VoiceIntent.SearchAction.PLAY, radio.getSearchAction());
+		assertEquals("radio", radio.getAddon());
+		assertEquals("jazz", radio.getQuery());
+	}
+
+	@Test
 	public void parsesOpenAddonWithoutEmptySearch() {
 		VoiceIntent youtube = VoiceIntentParser.parse("Open YouTube", Locale.ENGLISH);
 		assertEquals(VoiceIntent.Kind.OPEN_ADDON, youtube.getKind());
