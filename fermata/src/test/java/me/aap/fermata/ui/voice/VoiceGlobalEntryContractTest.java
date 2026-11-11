@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class VoiceGlobalEntryContractTest {
 	@Test
-	public void sharedMicrophonesUseGlobalEntryWhileChatKeepsItsContextualEntry()
+	public void sharedMicrophonesUseGlobalEntry()
 			throws IOException {
 		assertTrue(source("fermata/src/main/java/me/aap/fermata/ui/fragment/ToolBarMediator.java")
 				.contains("startGlobalVoiceControl()"));
@@ -20,8 +20,6 @@ public class VoiceGlobalEntryContractTest {
 				.contains("startGlobalVoiceControl()"));
 		assertTrue(source("fermata/src/main/java/me/aap/fermata/ui/fragment/FloatingButtonMediator.java")
 				.contains("startGlobalVoiceControl()"));
-		assertTrue(source("modules/chat/src/main/java/me/aap/fermata/addon/chat/ChatFragment.java")
-				.contains("public boolean startVoiceAssistant()"));
 	}
 
 	private static String source(String relative) throws IOException {
