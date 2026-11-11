@@ -31,6 +31,7 @@ public class VoiceGlobalEntryContractTest {
 		assertTrue(prefs.contains("return getBooleanPref(VOICE_CONTROl_ENABLED);"));
 		String feedback = source("fermata/src/main/java/me/aap/fermata/ui/activity/VoiceFeedbackController.java");
 		assertTrue(feedback.contains("TextToSpeech.createLocalOnly(context, locale)"));
+		assertTrue(feedback.contains("Toast.makeText(context, offlineVoiceMessage(locale)"));
 		String coordinator = source(
 				"fermata/src/main/java/me/aap/fermata/ui/activity/VoiceInteractionCoordinator.java");
 		assertTrue(coordinator.contains("voiceFeedback.speak("));
