@@ -16,11 +16,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.UtteranceProgressListener;
+import android.speech.tts.Voice;
 
 import androidx.annotation.Nullable;
 
 import java.io.Closeable;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -72,6 +74,24 @@ public class TextToSpeech implements Closeable {
 	/**
 	 * @noinspection UnusedReturnValue
 	 */
+	/**
+	 * Creates a synthesizer using only an installed voice that explicitly reports
+	 * that it does not require a network connection.
+	 */
+	public static FutureSupplier<TextToSpeech> createLocalOnly(Context ctx, Locale lang) {
+		return createLocalOnly(ctx, lang, null);
+	}
+
+	public static FutureSupplier<TextToSpeech> createLocalOnly(Context ctx, Locale lang,
+			@Nullable String engine) {
+		Promise<TextToSpeech> p = new Promise<>();
+		new TextToSpeech(ctx, engine, p);
+		return p.map(t -> {
+			t.setLanguageLocalOnly(lang);
+			return t;
+		});
+	}
+
 	public static FutureSupplier<Intent> installTtsData(Context ctx) {
 		return ActivityDelegate.getActivityDelegate(ctx)
 				.then(d -> d.startActivityForResult(() -> new Intent(ACTION_INSTALL_TTS_DATA)));
@@ -98,6 +118,44 @@ public class TextToSpeech implements Closeable {
 						TTS_ERR_LANG_NOT_SUPPORTED);
 			}
 		}
+	}
+
+	/**
+	 * Selects a matching installed voice only when Android reports it as offline.
+	 * Unlike setLanguage(Locale), this method never accepts a network-required voice.
+	 */
+	public void setLanguageLocalOnly(Locale lang) throws TextToSpeechException {
+		if (tts == null) throw new TextToSpeechException("TTS closed", TTS_ERR_CLOSED);
+		Voice selected = findLocalVoice(lang);
+		if (selected == null) {
+			throw new TextToSpeechException("No offline TTS voice installed for " + lang,
+					TTS_ERR_LANG_NOT_SUPPORTED);
+		}
+		tts.setVoice(selected);
+	}
+
+	/** Returns only locales backed by voices that do not require network access. */
+	public Set<Locale> getAvailableLocalLanguages() {
+		if (tts == null) return Collections.emptySet();
+		Set<Locale> languages = new HashSet<>();
+		for (Voice voice : tts.getVoices()) {
+			if (!voice.isNetworkConnectionRequired()) languages.add(voice.getLocale());
+		}
+		return Collections.unmodifiableSet(languages);
+	}
+
+	@Nullable
+	private Voice findLocalVoice(Locale lang) {
+		Set<Voice> voices = (tts == null) ? Collections.emptySet() : tts.getVoices();
+		Voice languageMatch = null;
+		for (Voice voice : voices) {
+			Locale candidate = voice.getLocale();
+			if (voice.isNetworkConnectionRequired() ||
+					!candidate.getLanguage().equalsIgnoreCase(lang.getLanguage())) continue;
+			if (candidate.equals(lang)) return voice;
+			if ((languageMatch == null) || candidate.getCountry().isEmpty()) languageMatch = voice;
+		}
+		return languageMatch;
 	}
 
 	public <T> FutureSupplier<T> speak(CharSequence text) {
