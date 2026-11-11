@@ -59,6 +59,14 @@ public class VoiceIntentParserTest {
 		assertEquals(VoiceIntent.SearchAction.PLAY, radio.getSearchAction());
 		assertEquals("radio", radio.getAddon());
 		assertEquals("jazz", radio.getQuery());
+
+		VoiceIntent iptv = VoiceIntentParser.parse("TV'de TRT haber izle", tr);
+		assertEquals("tv", iptv.getAddon());
+		assertEquals("trt haber", iptv.getQuery());
+
+		VoiceIntent podcast = VoiceIntentParser.parse("Podcast'te yapay zeka dinle", tr);
+		assertEquals("podcast", podcast.getAddon());
+		assertEquals("yapay zeka", podcast.getQuery());
 	}
 
 	@Test
