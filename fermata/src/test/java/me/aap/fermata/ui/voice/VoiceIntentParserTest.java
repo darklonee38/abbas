@@ -30,6 +30,12 @@ public class VoiceIntentParserTest {
 		assertEquals(VoiceIntent.PlaybackAction.BACK, VoiceIntentParser.parse("geri dön", tr).getPlaybackAction());
 		assertEquals(VoiceIntent.PlaybackAction.PLAY_FAVORITES, VoiceIntentParser.parse("favorilerimi oynat", tr).getPlaybackAction());
 		assertEquals(1, VoiceIntentParser.parse("ikinci sonuç", tr).getSelectionIndex());
+		assertEquals(0, VoiceIntentParser.parse("ilkini oynat", tr).getSelectionIndex());
+		assertEquals(1, VoiceIntentParser.parse("ikincisini", tr).getSelectionIndex());
+		assertEquals(2, VoiceIntentParser.parse("üçüncüyü", tr).getSelectionIndex());
+		assertEquals(VoiceIntent.PlaybackAction.PLAY, VoiceIntentParser.parse("devam et", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.PAUSE, VoiceIntentParser.parse("oynatmayı duraklat", tr).getPlaybackAction());
+		assertEquals(VoiceIntent.PlaybackAction.OPEN_CURRENT, VoiceIntentParser.parse("şu an ne çalıyor", tr).getPlaybackAction());
 		assertNull(VoiceIntentParser.parse("hava nasıl", tr));
 		assertNull(VoiceIntentParser.parse("altyazıları aç", tr));
 		assertNull(VoiceIntentParser.parse("oynat youtube", tr));
