@@ -272,7 +272,11 @@ final class VoiceInteractionCoordinator {
 		else if (voiceSession.getMode() != VoiceSession.Mode.SELECTION) voiceSession.beginCommand();
 		boolean adaptiveAllowed = !textInput && (voiceSession.getMode() == VoiceSession.Mode.COMMAND);
 		startSpeechRecognizer(null, textInput, adaptiveAllowed).onSuccess(results -> {
-			if ((results == null) || results.isEmpty()) return;
+			if ((results == null) || results.isEmpty()) {
+				if (!textInput) voiceFeedback.speak("Sizi anlayamadım. Tekrar deneyin.",
+						Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity)));
+				return;
+			}
 			if (focus instanceof EditText && !global) {
 				((EditText) focus).setText(results.get(0));
 				focus.requestFocus();
@@ -282,10 +286,10 @@ final class VoiceInteractionCoordinator {
 				VoiceIntent intent = VoiceIntentParser.parse(results.get(0),
 						Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity)));
 				VoiceCommandOutcome outcome = getCommandHandler().handleWithOutcome(results, requestId);
-				if (outcome.isHandled()) {
-					voiceFeedback.speak(buildVoiceFeedback(intent),
-							Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity)));
-				}
+				Locale feedbackLocale = Locale.forLanguageTag(
+						activity.getPrefs().getVoiceControlLang(activity));
+				voiceFeedback.speak(outcome.isHandled() ? buildVoiceFeedback(intent) :
+						"Bu komutu henüz desteklemiyorum.", feedbackLocale);
 				VoiceRecognitionSession current = speechListener;
 				if (current != null) current.applyCommandOutcome(outcome);
 				if (requestId != 0L) {
