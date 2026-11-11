@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, feature/abbas-ai-voice-2.0]
 
 permissions:
   contents: read
