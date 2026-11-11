@@ -39,11 +39,11 @@ public final class VoiceIntentParser {
 				phrase.toLowerCase(locale) : phrase);
 		if (text.isEmpty()) return null;
 
-		if (isAny(text, "play", "phát", "phat", "resume", "tiếp tục", "tiep tuc", "oynat", "başlat", "devam et"))
+		if (isAny(text, "play", "phát", "phat", "resume", "tiếp tục", "tiep tuc", "oynat", "başlat", "devam et", "devam", "çal", "cal", "müziği çal", "muzigi cal"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PLAY);
-		if (isAny(text, "pause", "tạm dừng", "tam dung", "duraklat"))
+		if (isAny(text, "pause", "tạm dừng", "tam dung", "duraklat", "beklet", "oynatmayı duraklat"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PAUSE);
-		if (isAny(text, "stop", "dừng", "dung", "durdur"))
+		if (isAny(text, "stop", "dừng", "dung", "durdur", "oynatmayı durdur"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.STOP);
 		if (isAny(text, "next", "next track", "next item", "bài tiếp theo", "bai tiep theo",
 				"kênh tiếp theo", "kenh tiep theo", "tập tiếp theo", "tap tiep theo", "sonraki", "sonraki kanal", "bir sonraki kanal", "sonraki şarkı", "sonraki parça", "sonraki bölüm"))
@@ -53,10 +53,10 @@ public final class VoiceIntentParser {
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PREVIOUS);
 		if (isAny(text, "go back", "quay lại", "quay lai", "geri", "geri dön"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.BACK);
-		if (isAny(text, "what is playing", "now playing", "đang phát gì", "dang phat gi", "ne çalıyor", "şu an oynatılan"))
+		if (isAny(text, "what is playing", "now playing", "đang phát gì", "dang phat gi", "ne çalıyor", "şu an oynatılan", "şu an ne çalıyor", "şu anda ne çalıyor"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.OPEN_CURRENT);
 		if (isAny(text, "play favorites", "play my favorites", "phát mục yêu thích",
-				"phat muc yeu thich", "favorileri oynat", "favorilerimi oynat", "oynat favoriler"))
+				"phat muc yeu thich", "favorileri oynat", "favorilerimi oynat", "oynat favoriler", "favorilerimi aç", "favorilerden oynat"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PLAY_FAVORITES);
 
 		int selection = parseSelectionIndex(text);
@@ -108,13 +108,13 @@ public final class VoiceIntentParser {
 		String text = normalize(phrase);
 		if (text.isEmpty()) return -1;
 		if (isAny(text, "1", "one", "first", "number one", "result one", "số một",
-				"so mot", "kết quả một", "ket qua mot", "bir", "birinci", "birinci sonuç"))
+				"so mot", "kết quả một", "ket qua mot", "bir", "birinci", "birinci sonuç", "ilkini", "ilkini oynat", "birincisini", "ilk sonuç", "ilk sonucu oynat"))
 			return 0;
 		if (isAny(text, "2", "two", "second", "number two", "result two", "số hai",
-				"so hai", "kết quả hai", "ket qua hai", "iki", "ikinci", "ikinci sonuç"))
+				"so hai", "kết quả hai", "ket qua hai", "iki", "ikinci", "ikinci sonuç", "ikincisini", "ikinciyi", "ikinciyi oynat", "ikinci sonucu oynat"))
 			return 1;
 		if (isAny(text, "3", "three", "third", "number three", "result three", "số ba",
-				"so ba", "kết quả ba", "ket qua ba", "üç", "üçüncü", "üçüncü sonuç"))
+				"so ba", "kết quả ba", "ket qua ba", "üç", "üçüncü", "üçüncü sonuç", "üçüncüyü", "üçüncüsünü", "üçüncü sonucu oynat"))
 			return 2;
 		return -1;
 	}
