@@ -6,8 +6,8 @@ ABBAS 2.2.2 (eski adı Dem TV); sesli karşılama, TV/IPTV, ana sayfada Radyo ve
 
 ## 1. Doğrudan indirme bağlantıları
 
-ABBAS 2.2.2 APK (güncel):
-https://media.githubusercontent.com/media/darklonee38/abbas/main/distribution/ABBAS.apk
+ABBAS APK (en son yayımlanan sürüm):
+https://github.com/darklonee38/abbas/releases/latest
 
 KingInstaller 2.3 APK — geliştiricinin resmî GitHub yayını:
 https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk
@@ -106,8 +106,8 @@ Araç bağlıyken direksiyondaki **ileri / geri** tuşları çalan listede sonra
 
 > ⛔ **SÜRÜŞTE KULLANILMAZ.** Park sürümü sadece araç dururken çalışır; vites değişip araç hareket edince Android Auto ABBAS’yı kapatır.
 
-ABBAS 2.2.6 park sürümü APK:
-https://media.githubusercontent.com/media/darklonee38/abbas/main/distribution/ABBAS-park-2.2.6.apk
+ABBAS park sürümü için yayımlanmış bir APK henüz doğrulanmadı; Releases sayfasını kontrol edin:
+https://github.com/darklonee38/abbas/releases/latest
 
 1. Telefonunuz **Android 15 veya üzeri** olmalı.
 2. APK’yı indirip **normal şekilde kurun**; KingInstaller gerekmez. Normal ABBAS kuruluysa üzerine kurulur, ayarlarınız silinmez.
