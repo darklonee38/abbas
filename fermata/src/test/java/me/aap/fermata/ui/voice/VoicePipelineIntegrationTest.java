@@ -30,6 +30,14 @@ public class VoicePipelineIntegrationTest {
 		assertEquals(VoiceIntent.Kind.PLAYBACK, next.getKind());
 		assertEquals(VoiceIntent.PlaybackAction.NEXT, next.getPlaybackAction());
 
+		VoiceIntent nextExplicit = VoiceIntentParser.parse("bir sonraki kanal", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, nextExplicit.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.NEXT, nextExplicit.getPlaybackAction());
+
+		VoiceIntent previous = VoiceIntentParser.parse("bir önceki kanal", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, previous.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.PREVIOUS, previous.getPlaybackAction());
+
 		VoiceIntent tv = VoiceIntentParser.parse("TV TRT 1 oynat", turkish);
 		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, tv.getKind());
 		assertEquals("tv", tv.getAddon());
