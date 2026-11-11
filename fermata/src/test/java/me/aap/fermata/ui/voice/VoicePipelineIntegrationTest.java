@@ -19,6 +19,29 @@ public class VoicePipelineIntegrationTest {
 			new VoiceEndpointPolicy(100, 50, 300, 20, 2);
 
 	@Test
+	public void turkishCommandsPreservePlaybackAndAddonSearchRouting() {
+		Locale turkish = Locale.forLanguageTag("tr-TR");
+
+		VoiceIntent pause = VoiceIntentParser.parse("duraklat", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, pause.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.PAUSE, pause.getPlaybackAction());
+
+		VoiceIntent next = VoiceIntentParser.parse("sonraki kanal", turkish);
+		assertEquals(VoiceIntent.Kind.PLAYBACK, next.getKind());
+		assertEquals(VoiceIntent.PlaybackAction.NEXT, next.getPlaybackAction());
+
+		VoiceIntent tv = VoiceIntentParser.parse("TV TRT 1 oynat", turkish);
+		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, tv.getKind());
+		assertEquals("tv", tv.getAddon());
+		assertEquals("trt 1", tv.getQuery());
+
+		VoiceIntent youtube = VoiceIntentParser.parse("YouTube'da haber ara", turkish);
+		assertEquals(VoiceIntent.Kind.ADDON_SEARCH, youtube.getKind());
+		assertEquals("youtube", youtube.getAddon());
+		assertEquals("haber", youtube.getQuery());
+	}
+
+	@Test
 	public void longEnglishMediaNameWaitsForFinalResult() {
 		Fixture f = new Fixture(true);
 		String[] partials = {
