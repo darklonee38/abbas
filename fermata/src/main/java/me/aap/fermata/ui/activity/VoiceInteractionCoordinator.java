@@ -41,6 +41,7 @@ final class VoiceInteractionCoordinator {
 	private final MainActivityDelegate activity;
 	private final VoiceSession voiceSession = new VoiceSession();
 	private final VoiceInteractionTransaction transaction = new VoiceInteractionTransaction();
+	private final VoiceFeedbackController voiceFeedback;
 	private VoiceRecognitionSession speechListener;
 	private VoiceCommandHandler commandHandler;
 	private long nextTransactionId;
@@ -49,6 +50,7 @@ final class VoiceInteractionCoordinator {
 
 	VoiceInteractionCoordinator(MainActivityDelegate activity) {
 		this.activity = activity;
+		this.voiceFeedback = new VoiceFeedbackController(activity.getContext());
 	}
 
 	void startContextualAssistant() {
@@ -196,6 +198,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void onHostPaused() {
+		voiceFeedback.stop();
 		if (speechListener != null) speechListener.destroy();
 		transaction.cancel();
 		transactionTimeout.cancel();
@@ -203,6 +206,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void close() {
+		voiceFeedback.close();
 		if (speechListener != null) speechListener.destroy();
 		voiceSession.clear();
 		transaction.cancel();
@@ -278,6 +282,10 @@ final class VoiceInteractionCoordinator {
 				VoiceIntent intent = VoiceIntentParser.parse(results.get(0),
 						Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity)));
 				VoiceCommandOutcome outcome = getCommandHandler().handleWithOutcome(results, requestId);
+				if (outcome.isHandled()) {
+					voiceFeedback.speak(buildVoiceFeedback(intent),
+							Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity)));
+				}
 				VoiceRecognitionSession current = speechListener;
 				if (current != null) current.applyCommandOutcome(outcome);
 				if (requestId != 0L) {
@@ -329,6 +337,33 @@ final class VoiceInteractionCoordinator {
 					speechListener.start(intent);
 					return promise;
 				});
+	}
+
+	private String buildVoiceFeedback(@Nullable VoiceIntent intent) {
+		if (intent == null) return "Komut tamamlandı.";
+		return switch (intent.getKind()) {
+			case SELECTION -> "Seçiminiz alındı.";
+			case OPEN_ADDON -> "İçerik bölümü açılıyor.";
+			case ADDON_SEARCH -> {
+				String query = intent.getQuery();
+				String prefix = switch (intent.getSearchAction()) {
+					case PLAY -> "Oynatmak için aranıyor: ";
+					case FIND -> "Aranıyor: ";
+					case OPEN -> "Açılıyor: ";
+				};
+				yield prefix + ((query == null) ? "içerik" : query);
+			}
+			case PLAYBACK -> switch (intent.getPlaybackAction()) {
+				case PLAY -> "Oynatılıyor.";
+				case PAUSE -> "Duraklatıldı.";
+				case STOP -> "Durduruldu.";
+				case NEXT -> "Sonraki içeriğe geçiliyor.";
+				case PREVIOUS -> "Önceki içeriğe geçiliyor.";
+				case BACK -> "Geri dönülüyor.";
+				case OPEN_CURRENT -> "Şu anki içerik açılıyor.";
+				case PLAY_FAVORITES -> "Favoriler oynatılıyor.";
+			};
+		};
 	}
 
 	private VoiceCommandHandler getCommandHandler() {
