@@ -46,10 +46,10 @@ public final class VoiceIntentParser {
 		if (isAny(text, "stop", "dừng", "dung", "durdur"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.STOP);
 		if (isAny(text, "next", "next track", "next item", "bài tiếp theo", "bai tiep theo",
-				"kênh tiếp theo", "kenh tiep theo", "tập tiếp theo", "tap tiep theo", "sonraki", "sonraki kanal", "sonraki bölüm", "sonraki parça"))
+				"kênh tiếp theo", "kenh tiep theo", "tập tiếp theo", "tap tiep theo", "sonraki", "sonraki kanal", "bir sonraki kanal", "sonraki şarkı", "sonraki parça", "sonraki bölüm"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.NEXT);
 		if (isAny(text, "previous", "previous track", "previous item", "bài trước",
-				"bai truoc", "kênh trước", "kenh truoc", "tập trước", "tap truoc", "önceki", "önceki kanal", "önceki bölüm", "önceki parça"))
+				"bai truoc", "kênh trước", "kenh truoc", "tập trước", "tap truoc", "önceki", "önceki kanal", "bir önceki kanal", "önceki şarkı", "önceki parça", "önceki bölüm"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.PREVIOUS);
 		if (isAny(text, "go back", "quay lại", "quay lai", "geri", "geri dön"))
 			return VoiceIntent.playback(VoiceIntent.PlaybackAction.BACK);
