@@ -2,7 +2,7 @@
 
 Depo: https://github.com/darklonee38/abbas
 
-Dağıtılan tek APK, telefon ve Android Auto için `me.app.fermataX.auto.debug` paketidir. İlk yayımlanan sürüm 2.0.2 (309); 2.1.4 (315), kapanma bildirimi nedeniyle kararlı listeden çekildi. ABBAS 2.1.5 (316), dört temel işlevi içeren ön sürümdür. Kullanıcı çalıştığını bildirdi; normal kurulumla Android Auto görünürlüğü sağlanamadı. Rehber KingInstaller üzerinden kurulumla güncellendi; araç doğrulaması tamamlanmadan kararlı güncelleme olarak sunulmaz.
+ABBAS markalı yeni APK henüz yayımlanmadı. Uygulama içi güncelleme kontrolü artık `darklonee38/abbas` deposunun Release kayıtlarını kullanır. İlk yayımlanan sürüm 2.0.2 (309); 2.1.4 (315), kapanma bildirimi nedeniyle kararlı listeden çekildi. ABBAS 2.1.5 (316), dört temel işlevi içeren ön sürümdür. Kullanıcı çalıştığını bildirdi; normal kurulumla Android Auto görünürlüğü sağlanamadı. Rehber KingInstaller üzerinden kurulumla güncellendi; araç doğrulaması tamamlanmadan kararlı güncelleme olarak sunulmaz.
 
 Uygulama arka planda güncelleme kontrolü yapmaz ve güncelleme bildirimi göndermez (2.2.2 ve sonrası). Uygulama açıkken sürüm bilgisi okunur; yeni sürüm **Ayarlar → Arayüz → Uygulama güncellemeleri** ekranında gösterilir ve oradan **İndir ve yükle** ile kurulur.
 
@@ -10,7 +10,7 @@ APK indirilmeden önce `update-auto-debug.json` okunur; yalnızca bu depodaki ta
 
 ## Mevcut dağıtım
 
-GitHub hesabında Actions devre dışı; doğrudan Release varlığı yükleme bağlantısı da bu ortamın kimlik bilgisini kabul etmiyor. Bu nedenle ilk APK `distribution/ABBAS-universal.apk` yolunda Git LFS ile tutulur. Release sayfası tek dosya APK indirme bağlantısını verir. `distribution/update-auto-debug.json` sürüm etiketiyle birlikte sabitlenir. Uygulama önce Release varlıklarını arar; bulunmazsa aynı etiketin depodaki manifestini okur ve yalnızca GitHub'ın bu depoya ait sürüm etiketindeki APK dosyasını indirir.
+GitHub hesabında Actions devre dışı; doğrudan Release varlığı yükleme bağlantısı da bu ortamın kimlik bilgisini kabul etmiyor. Bu nedenle yeni ABBAS APK’sı üretildiğinde `ABBAS-universal.apk` adıyla GitHub Release’e yüklenir; mevcut depoda henüz bu APK dosyası yoktur. Release sayfası tek dosya APK indirme bağlantısını verir. `distribution/update-auto-debug.json` sürüm etiketiyle birlikte sabitlenir. Uygulama önce Release varlıklarını arar; bulunmazsa aynı etiketin depodaki manifestini okur ve yalnızca GitHub'ın bu depoya ait sürüm etiketindeki APK dosyasını indirir.
 
 Actions kapalı olsa da uygulama içi sürüm kontrolü, bildirim ve indirme çalışır. Elle yeni sürüm yayımlarken aynı imzayla APK oluşturun, `python scripts/verify_security_apk.py APK --aapt /SDK/build-tools/36.0.0/aapt` kontrolünü çalıştırın, LFS dosyasını güncelleyin, `python scripts/create_update_manifest.py distribution/ABBAS-universal.apk distribution/update-auto-debug.json repository-lfs` çalıştırın ve bütün değişiklikleri aynı sürüm etiketiyle yayımlayın. Sürüm kodunu artırın. Otomatik güncelleme için Release taslak/ön sürüm olmamalıdır. Doğrulama bekleyen 2.1.5 gibi test APK’larını ön sürüm olarak yayımlayın; bunlar uygulamadaki otomatik güncelleme akışına girmez.
 
