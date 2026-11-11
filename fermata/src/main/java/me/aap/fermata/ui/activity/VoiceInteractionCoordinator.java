@@ -306,7 +306,7 @@ final class VoiceInteractionCoordinator {
 		}).onFailure(error -> {
 			if (!isCancellation(error)) Log.e(error, "Failed to request RECORD_AUDIO permission");
 			showAlert(activity.getContext(), R.string.err_no_audio_record_perm);
-		}).then(ignored -> SpeechRecognitionSupport.requireRecognitionService(activity.getContext()))
+		}).then(ignored -> SpeechRecognitionSupport.requireOnDeviceRecognitionService(activity.getContext()))
 				.then(ignored -> {
 					if (speechListener != null) speechListener.destroy();
 					Promise<List<String>> promise = new Promise<>();
@@ -322,7 +322,7 @@ final class VoiceInteractionCoordinator {
 						intent.putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION, true);
 						intent.putStringArrayListExtra(
 								RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES,
-								new ArrayList<>(List.of("en-US", "vi-VN")));
+								new ArrayList<>(List.of("en-US", "tr-TR", "vi-VN")));
 					}
 					speechListener = new VoiceRecognitionSession(activity, promise, textInput,
 							adaptiveAllowed, voiceSession.getMode() == VoiceSession.Mode.SELECTION);
