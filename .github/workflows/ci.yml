@@ -58,7 +58,7 @@ jobs:
           ./gradlew --version
 
       - name: Validate universal build entry point
-        run: sh -n build.sh
+        run: bash -n build.sh
 
       - name: Verify Web-only production graph
         run: ./gradlew verifyWebOnlyProductionGraph --no-daemon --no-parallel --stacktrace
