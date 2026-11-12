@@ -317,7 +317,11 @@ final class VoiceInteractionCoordinator {
 				}
 			}
 		}).onCompletion((result, fail) -> {
-			if (textInput) voiceSession.beginCommand();
+			// A completed text-input recognizer must not reset the mode of a newer
+			// global voice transaction that started while this recognizer was finishing.
+			if (textInput && ((requestId == 0L) || transaction.isCurrent(requestId))) {
+				voiceSession.beginCommand();
+			}
 		});
 	}
 
