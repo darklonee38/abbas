@@ -359,7 +359,7 @@ public class FermataNavBarView extends NavBarView implements GestureListener {
 	private void applyVisualState(View item) {
 		if (!(item instanceof NavButtonView button)) return;
 		ImageViewCompat.setImageTintList(button.getIcon(), ColorStateList.valueOf(
-				MediaHubStyle.destinationAccent(item.getId())));
+				(item.isSelected() || item.isFocused()) ? 0xFFFF354F : 0xFFF1F5FB));
 		button.getIcon().setAlpha(item.isSelected() || item.isFocused() ?
 				1F : INACTIVE_ICON_ALPHA);
 	}
