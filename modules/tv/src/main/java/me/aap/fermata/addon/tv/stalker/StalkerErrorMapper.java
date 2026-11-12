@@ -28,7 +28,7 @@ final class StalkerErrorMapper {
 		String message;
 		if (root instanceof UnknownHostException) {
 			message = text(R.string.stalker_error_host_not_found,
-					"Unable to find Stalker portal %1$s.", account.getPortal());
+					"Unable to find Stalker portal %1$s.", account.redact(account.getPortal()));
 		} else if (root instanceof ConnectException) {
 			message = text(R.string.stalker_error_connect,
 					"Unable to connect to Stalker portal %1$s.", account.getPortal());
