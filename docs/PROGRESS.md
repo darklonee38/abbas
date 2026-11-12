@@ -2,7 +2,7 @@
 
 **Branch:** `work/abbas-phase1-security-brand`
 **Base:** `main` (`e4eca9cc1483ca59ae5a56e1fd271b1a926bb229`)
-**Last progress update:** `952b47ac110bcc73feabe47217442edad914d795`
+**Last progress update:** pending this commit (previous reference `952b47ac...` is not an ancestor of current branch HEAD)
 
 ## Task status
 
@@ -19,7 +19,7 @@
 | Release signing configuration and documentation | Bitti | `keystore.properties` and `STORE_*` env supported; partial config rejected; private key files ignored; README documents key generation, offline backup, Release assets, and `REQUEST_INSTALL_PACKAGES` rationale |
 | Dead-code/dependency analysis and safe removals | Devam | Must verify APK contents and references before deletion |
 | ABBAS branding and README cleanup | Devam | README identifies ABBAS and removes KingInstaller/Shizuku and Dem TV directions; full resource/string/TTS scan still pending |
-| CI, APK inspection, residual scan, PR creation | Devam | Run `43170437488` compile failure fixed in `b3390df`; run `43170919459` reached `Build universal APK` on SHA `a479f68` but was still running when last checked. Later commits require a fresh successful run; APK inspection not yet performed |
+| CI, APK inspection, residual scan, PR creation | Devam | Run `43171296149` built the Auto debug universal APK successfully but failed in `verify_security_apk.py` because the audit incorrectly classified the required voice-recognition `RECORD_AUDIO` permission as forbidden. Fixed the audit to allow this documented, runtime-requested permission while retaining the other sensitive-permission denylist; fresh CI required. APK inspection/tests/lint remain pending |
 
 ## Guardrails
 
@@ -31,11 +31,15 @@
 
 ## Completed in latest work
 
+- Fixed the APK permission audit false positive: `RECORD_AUDIO` is required for the existing user-triggered voice-recognition feature and is checked at runtime by `VoiceInteractionCoordinator`; the verifier now reports it separately as an explicitly approved permission. Commit: `9eeb198d4c010f15db90a1ab4522c11f5de283a2`.
+
 - Updater metadata no longer supports the raw.githubusercontent.com / Git LFS fallback. Release APK must be a declared GitHub Release asset; non-release distribution channels are rejected.
 - Default application ID changed from `me.app.fermataX` to `com.abbas`. The Auto release variant therefore resolves to `com.abbas.auto`; the Auto debug test/build variant resolves to `com.abbas.auto.debug`.
 - Updater manifest generator and package identity tests aligned with `com.abbas.auto.debug`.
 
 ## Latest CI diagnosis and fixes
+
+- Run `43171296149` on `5c345ab16560f4a0e79cf5a2377063a5485ee927`: universal APK build succeeded; APK verification failed at the `RECORD_AUDIO` denylist assertion. Unit tests, lint, and release publication were skipped. The verifier fix is committed as `9eeb198d4c010f15db90a1ab4522c11f5de283a2`; rerun required.
 
 - Run `43170437488` failed in `:fermata:compileAutoDebugJavaWithJavac`: `GithubUpdater.java` referenced the removed `UpdateManifest.repositoryAssetUrl(JSONObject,String)` fallback.
 - Removed the obsolete repository/LFS fallback call; updater now requires the declared GitHub Release manifest asset. Fix commit: `b3390df0d882c5c29fd5ca58f45525676ac546b7`.
@@ -48,4 +52,4 @@
 
 ## Next step
 
-Inspect CI for the latest SHA and rerun after the latest commits. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
+Rerun CI after the verifier fix; inspect APK only after the complete workflow succeeds. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
