@@ -33,6 +33,7 @@
 
 ## Completed in latest work
 
+- Xtream and Stalker redirect handlers now disable automatic redirect following and block HTTPS-to-HTTP downgrade. Xtream also rejects cross-origin redirects to avoid forwarding credential-bearing API URLs; focused downgrade policy tests added. Commits: `15d6d2b70852`, `c96cfba00d18`, `6f0ae351dca8`, `8e555749bf1c`.\n
 - Added `TvErrorMessages` and routed TV source add/edit/check/reload error dialogs through `DiagnosticSanitizer`; added tests for Xtream URL credentials, Stalker MAC/serial and stream tokens. Commits: `9dc285345b1a`, `4d330fb4c1dc`, `49eae82cac38`.\n- Added Turkish CI prerelease notes after the release job exposed the missing workflow input. Commit: `c6c9436805d7`.\n
 - Redacted full user-source URLs (including userinfo, path and query) from shared downloader start/success/failure logs and explicit HTTP status errors; added unit tests covering embedded credentials/tokens and non-HTTP URL input. Commits: `9e3fc9ba60602c613c41c906e10b8372cb989bb3`, `d4520f5113172b8d1981e1a99e961cfb96015274`, `4e50a538bdc9d32315192b3fb16ab6ace207295`.
 - Fixed the APK permission audit false positive: `RECORD_AUDIO` is required for the existing user-triggered voice-recognition feature and is checked at runtime by `VoiceInteractionCoordinator`; the verifier now reports it separately as an explicitly approved permission. Commit: `9eeb198d4c010f15db90a1ab4522c11f5de283a2`.
