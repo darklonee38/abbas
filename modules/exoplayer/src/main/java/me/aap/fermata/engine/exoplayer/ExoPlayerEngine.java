@@ -49,6 +49,7 @@ import me.aap.fermata.BuildConfig;
 import me.aap.fermata.FermataApplication;
 import me.aap.fermata.diagnostics.DiagnosticEvent;
 import me.aap.fermata.diagnostics.DiagnosticPriority;
+import me.aap.fermata.diagnostics.DiagnosticSanitizer;
 import me.aap.fermata.diagnostics.DiagnosticScope;
 import me.aap.fermata.media.engine.AudioStreamInfo;
 import me.aap.fermata.media.engine.EnginePrepareWatchdog;
@@ -73,6 +74,7 @@ import me.aap.utils.log.Log;
 public class ExoPlayerEngine extends MediaEngineBase implements Player.Listener {
 	static final long EXO_PREPARE_TIMEOUT_MS = 30_000L;
 	private static final DataSource.Factory httpDsFactory;
+	private static final DiagnosticSanitizer ERROR_SANITIZER = new DiagnosticSanitizer();
 
 	static {
 		httpDsFactory = createHttpDataSourceFactory();
@@ -263,7 +265,7 @@ public class ExoPlayerEngine extends MediaEngineBase implements Player.Listener 
 		preparing = false;
 		recordDiagnostic("engine_error", DiagnosticScope.ESSENTIAL, DiagnosticPriority.ERROR, source,
 				generation, null, (error == null) ? "unknown" : error.getClass().getSimpleName());
-		listener.onEngineError(this, error);
+		listener.onEngineError(this, safePlaybackError(error));
 	}
 
 	@Override
@@ -553,6 +555,13 @@ public class ExoPlayerEngine extends MediaEngineBase implements Player.Listener 
 		recordDiagnostic("engine_error", DiagnosticScope.ESSENTIAL, DiagnosticPriority.ERROR, source,
 				prepareGeneration, null, error.getClass().getSimpleName());
 		listener.onEngineError(this, error);
+	}
+
+	static MediaEngineException safePlaybackError(PlaybackException error) {
+		String message = (error == null) ? null : error.getMessage();
+		String safe = ERROR_SANITIZER.sanitize(message);
+		if ((safe == null) || safe.isBlank()) safe = "EXO_PLAYBACK_FAILED";
+		return new MediaEngineException("EXO_PLAYBACK_FAILED: " + safe);
 	}
 
 	private void onPrepareTimeout() {
