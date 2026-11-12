@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
@@ -34,10 +35,10 @@ public class DashboardBrandingResourceTest {
     }
 
     private static String read(String path) throws Exception {
-        Path file = Path.of(System.getProperty("user.dir")).resolve(path);
+        Path file = Paths.get(System.getProperty("user.dir")).resolve(path);
         if (!Files.isRegularFile(file)) {
             throw new AssertionError("Missing dashboard branding resource: " + path);
         }
-        return Files.readString(file, StandardCharsets.UTF_8);
+        return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
     }
 }
