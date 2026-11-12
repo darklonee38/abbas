@@ -266,8 +266,8 @@ public final class StalkerAccount {
 	private static String normalizePortal(String value) {
 		String portal = trim(value);
 		if (isNullOrBlank(portal)) return portal;
-		if (portal.startsWith("//")) portal = "http:" + portal;
-		else if (!portal.contains("://")) portal = "http://" + portal;
+		if (portal.startsWith("//")) portal = "https:" + portal;
+		else if (!portal.contains("://")) portal = "https://" + portal;
 
 		try {
 			URI uri = new URI(portal);
