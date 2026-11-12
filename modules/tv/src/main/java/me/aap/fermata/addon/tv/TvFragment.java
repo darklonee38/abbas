@@ -272,7 +272,7 @@ public class TvFragment extends MediaLibFragment {
 						.onCompletion((account, err) -> {
 							if ((err != null) && !(err instanceof CancellationException)) {
 								Log.e(err, "Failed to edit TV source ", i);
-								UiUtils.showAlert(getContext(), err.getLocalizedMessage());
+								UiUtils.showAlert(getContext(), TvErrorMessages.from(err));
 							}
 							getMainActivity().showFragment(getFragmentId());
 							if (account != null) {
