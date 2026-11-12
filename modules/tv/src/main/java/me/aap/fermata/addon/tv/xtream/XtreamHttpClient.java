@@ -90,21 +90,62 @@ final class XtreamHttpClient {
 
 	private HttpURLConnection openConnection(URL requestUrl, String acceptEncoding)
 			throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
-		connection.setRequestMethod("GET");
-		connection.setInstanceFollowRedirects(true);
-		connection.setRequestProperty("Accept-Encoding", acceptEncoding);
-		String userAgent = account.getUserAgent();
-		if (userAgent != null) connection.setRequestProperty("User-Agent", userAgent);
-
-		int timeout = account.getResponseTimeout();
-		if (timeout > 0) {
-			int millis = (int) Math.min(Integer.MAX_VALUE, timeout * 1000L);
-			connection.setConnectTimeout(millis);
-			connection.setReadTimeout(millis);
+		URL current = requestUrl;
+		for (int redirects = 0; ; redirects++) {
+			String scheme = current.getProtocol();
+			if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
+				throw new IOException("Xtream request destination is invalid");
+			}
+			HttpURLConnection connection = (HttpURLConnection) current.openConnection();
+			try {
+				connection.setRequestMethod("GET");
+				connection.setInstanceFollowRedirects(false);
+				connection.setRequestProperty("Accept-Encoding", acceptEncoding);
+				String userAgent = account.getUserAgent();
+				if (userAgent != null) connection.setRequestProperty("User-Agent", userAgent);
+				int timeout = account.getResponseTimeout();
+				if (timeout > 0) {
+					int millis = (int) Math.min(Integer.MAX_VALUE, timeout * 1000L);
+					connection.setConnectTimeout(millis);
+					connection.setReadTimeout(millis);
+				}
+				int status = connection.getResponseCode();
+				if (!isRedirect(status)) return connection;
+				if (redirects >= 5) throw new IOException("Xtream request exceeded the redirect limit");
+				String location = connection.getHeaderField("Location");
+				if ((location == null) || location.isBlank()) {
+					throw new IOException("Xtream redirect did not include a destination");
+				}
+				URL next = new URL(current, location);
+				if (isHttpsDowngrade(current, next) || !sameOrigin(current, next)) {
+					throw new IOException("Xtream redirect to an untrusted destination was blocked");
+				}
+				close(connection.getErrorStream());
+				close(connection.getInputStream());
+				connection.disconnect();
+				current = next;
+			} catch (IOException | RuntimeException ex) {
+				connection.disconnect();
+				throw ex;
+			}
 		}
+	}
 
-		return connection;
+	static boolean isHttpsDowngrade(URL current, URL next) {
+		return "https".equalsIgnoreCase(current.getProtocol()) &&
+				"http".equalsIgnoreCase(next.getProtocol());
+	}
+
+	private static boolean isRedirect(int status) {
+		return status == HttpURLConnection.HTTP_MOVED_PERM ||
+				status == HttpURLConnection.HTTP_MOVED_TEMP ||
+				status == HttpURLConnection.HTTP_SEE_OTHER || status == 307 || status == 308;
+	}
+
+	private static boolean sameOrigin(URL first, URL second) {
+		return first.getProtocol().equalsIgnoreCase(second.getProtocol()) &&
+				first.getHost().equalsIgnoreCase(second.getHost()) &&
+				first.getPort() == second.getPort();
 	}
 
 	private InputStream decode(InputStream in, CharSequence encoding) throws IOException {
