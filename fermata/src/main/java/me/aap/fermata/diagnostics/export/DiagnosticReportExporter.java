@@ -59,7 +59,7 @@ public final class DiagnosticReportExporter {
 	private static final Pattern FORBIDDEN_PAYLOAD = Pattern.compile(
 			"(?i)(?:https?://|file:/{1,3}|content://|magnet:\\?|(?:proxy-)?authorization\\s*[:=]|" +
 					"(?:bearer|basic)\\s+[A-Za-z0-9._~+/=-]+|(?:password|passwd|client_secret|" +
-					"access_token|refresh_token|api_key|mac(?:_address)?|serial(?:_number)?|device_id)\\s*[:=]|Fermata\\.log|tombstone)");
+					"access_token|refresh_token|api_key|mac(?:_address)?|serial(?:_number)?|device_id)[\"']?\\s*[:=]|Fermata\\.log|tombstone)");
 
 	private DiagnosticReportExporter() {
 	}
