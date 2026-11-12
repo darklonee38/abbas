@@ -34,6 +34,22 @@ public class ExoPlayerEngineProviderTest {
 	}
 
 	@Test
+	public void playbackErrorPresentationRedactsCredentialsAndSourceUrls() {
+		String safe = ExoPlayerEngine.safePlaybackMessage(
+				"HTTP failed https://alice:password@example.invalid/live?token=secret");
+		assertFalse(safe.contains("alice"));
+		assertFalse(safe.contains("password"));
+		assertFalse(safe.contains("example.invalid"));
+		assertFalse(safe.contains("token=secret"));
+	}
+
+	@Test
+	public void playbackErrorPresentationHasSafeFallbackForEmptyMessages() {
+		assertEquals("Playback failed", ExoPlayerEngine.safePlaybackMessage(null));
+		assertEquals("Playback failed", ExoPlayerEngine.safePlaybackMessage("  "));
+	}
+
+	@Test
 	public void letsExoPlayerOwnItsAudioSession() throws Exception {
 		String source = new String(Files.readAllBytes(
 				Path.of("src/main/java/me/aap/fermata/engine/exoplayer/ExoPlayerEngine.java")),
