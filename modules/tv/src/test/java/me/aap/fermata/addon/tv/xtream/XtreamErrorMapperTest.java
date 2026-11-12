@@ -26,6 +26,15 @@ public class XtreamErrorMapperTest extends Assert {
 	}
 
 	@Test
+	public void serverControlledHttpReasonCannotLeakCredentials() {
+		Throwable mapped = mapper.map(mapper.httpStatus(503,
+				"Unavailable password=secret-pass https://user:pass@example.com/live"));
+		assertFalse(mapped.getMessage().contains("secret-pass"));
+		assertFalse(mapped.getMessage().contains("user:pass"));
+		assertFalse(mapped.getMessage().contains("example.com"));
+	}
+
+	@Test
 	public void invalidProviderPayloadsKeepClearMessages() {
 		assertMessage(new IOException("Invalid Xtream response: expected JSON, got HTML"),
 				"returned an HTML error page instead of JSON");
