@@ -1169,7 +1169,8 @@ public class MainActivityDelegate extends ActivityDelegate
 			t.setOnLongClickListener(v -> {
 				long textInputGeneration = voiceInteraction.beginTextInput();
 				startSpeechRecognizer(null, true).onSuccess(q -> {
-					if ((q != null) && !q.isEmpty()) t.setText(q.get(0));
+					if (voiceInteraction.isCurrentTextInput(textInputGeneration) &&
+							(q != null) && !q.isEmpty()) t.setText(q.get(0));
 				})
 						.onCompletion((result, fail) -> {
 							// Do not let this older text-input session overwrite a newer
