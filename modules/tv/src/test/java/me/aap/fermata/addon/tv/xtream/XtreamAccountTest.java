@@ -15,6 +15,13 @@ public class XtreamAccountTest extends Assert {
 
 
 	@Test
+	public void schemelessPortalDefaultsToHttps() {
+		XtreamAccount account = new XtreamAccount(0, null, 1, "portal.example.invalid",
+				0, "user", "pass", 0, null, 0);
+		assertEquals("https", account.getScheme());
+	}
+
+	@Test
 	public void parsesM3uPortalUrlFromHostField() {
 		XtreamAccount account = new XtreamAccount(0, null, 0,
 				"http://portal.example.invalid:2082/get.php?username=test-user&password=test-pass&type=m3u&output=m3u8",
