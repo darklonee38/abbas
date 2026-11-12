@@ -6,8 +6,8 @@ name: Build test APK
 # only be installed on phones that do not already have ABBAS installed.
 
 on:
-  push:
-    branches: [feature/tv-user-playlists, work/abbas-phase1-security-brand]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -15,7 +15,7 @@ permissions:
 
 concurrency:
   group: build-test-apk-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   apk:
@@ -52,6 +52,12 @@ jobs:
             echo "::warning::No signing secret; the APK uses a new debug key."
           fi
 
+      - name: Unit tests
+        run: bash gradlew :tv:testMobileDebugUnitTest :web:testMobileDebugUnitTest :fermata:testMobileDebugUnitTest :fermata:testAutoDebugUnitTest --console=plain
+
+      - name: Lint
+        run: bash gradlew :fermata:lintMobileDebug :fermata:lintAutoDebug --console=plain
+
       - name: Build universal APK
         run: bash gradlew verifyWebOnlyProductionGraph :fermata:packageAutoDebugUniversalApk --console=plain
 
@@ -72,13 +78,8 @@ jobs:
           name: ABBAS-test-apk-${{ github.sha }}
           path: out/
 
-      - name: Unit tests
-        run: bash gradlew :tv:testMobileDebugUnitTest :web:testMobileDebugUnitTest :fermata:testMobileDebugUnitTest :fermata:testAutoDebugUnitTest --console=plain
-
-      - name: Lint
-        run: bash gradlew :fermata:lintMobileDebug :fermata:lintAutoDebug --console=plain
-
       - name: Publish test prerelease
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.apk.outputs.tag }}
