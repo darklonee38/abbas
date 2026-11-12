@@ -13,13 +13,13 @@ final class TvPlaylistUrls {
 
 	/**
 	 * Returns a trimmed HTTP(S) playlist URL, or {@code null} when the input cannot be used.
-	 * A bare host such as {@code example.com/list.m3u} is completed with {@code http://}.
+	 * A bare host such as {@code example.com/list.m3u} is completed with {@code https://}.
 	 */
 	static String normalize(String input) {
 		if (input == null) return null;
 		String url = input.trim();
 		if (url.isEmpty() || containsWhitespace(url)) return null;
-		if (!url.contains("://")) url = "http://" + url;
+		if (!url.contains("://")) url = "https://" + url;
 
 		try {
 			URI uri = new URI(url);
