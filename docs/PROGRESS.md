@@ -13,7 +13,7 @@
 | HTTPS default for schemeless Stalker portals | Bitti | commit `615eedba279847e0a600e4de228429f901920f85` |
 | Stalker HTTPS normalization tests | Bitti | commit `2496d9a5f7c6777655e3bdd29051c355adb325f2` |
 | HTTP explicit-consent enforcement for M3U/Xtream/Stalker | Devam | HTTPS is now the default for new schemeless Xtream sources (scheme preference default changed to index 1, test added); explicit HTTP remains selectable and legacy HTTP sources still need a consent gate across all network entry points |
-| IPTV/Xtream/Stalker secret-safe logging audit and tests | Devam | Existing redact helpers found; all call sites still require audit |
+| IPTV/Xtream/Stalker secret-safe logging audit and tests | Devam | Added URL redaction in the shared `HttpFileDownloader` logs and safe URL formatting for its explicit HTTP errors; added unit tests for credentials/path/query and non-HTTP URLs. Commits `9e3fc9b`, `d4520f5`, `4e50a53`. Other clients, response diagnostics and exception payloads still need audit |
 | Package identity migration to `com.abbas.auto` | Devam | Base applicationId now `com.abbas`; Auto release resolves to `com.abbas.auto`, debug to `com.abbas.auto.debug`; updater manifest generator/tests aligned. Full provider/authority/build verification still pending |
 | Release updater endpoint and APK/signature/hash verification | Devam | GitHub Release-only manifest/APK assets; APK package/version/size/SHA-256 and signer-certificate SHA-256 are checked before Android installer. CI verification pending |
 | Release signing configuration and documentation | Bitti | `keystore.properties` and `STORE_*` env supported; partial config rejected; private key files ignored; README documents key generation, offline backup, Release assets, and `REQUEST_INSTALL_PACKAGES` rationale |
@@ -31,6 +31,7 @@
 
 ## Completed in latest work
 
+- Redacted full user-source URLs (including userinfo, path and query) from shared downloader start/success/failure logs and explicit HTTP status errors; added unit tests covering embedded credentials/tokens and non-HTTP URL input. Commits: `9e3fc9ba60602c613c41c906e10b8372cb989bb3`, `d4520f5113172b8d1981e1a99e961cfb96015274`, `4e50a538bdc9d32315192b3fb16ab6ace207295`.
 - Fixed the APK permission audit false positive: `RECORD_AUDIO` is required for the existing user-triggered voice-recognition feature and is checked at runtime by `VoiceInteractionCoordinator`; the verifier now reports it separately as an explicitly approved permission. Commit: `9eeb198d4c010f15db90a1ab4522c11f5de283a2`.
 
 - Updater metadata no longer supports the raw.githubusercontent.com / Git LFS fallback. Release APK must be a declared GitHub Release asset; non-release distribution channels are rejected.
@@ -52,4 +53,4 @@
 
 ## Next step
 
-Rerun CI after the verifier fix; inspect APK only after the complete workflow succeeds. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
+Run CI on the latest source/test commits; inspect APK only after the complete workflow succeeds. Continue HTTP consent enforcement and remaining redaction audit. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
