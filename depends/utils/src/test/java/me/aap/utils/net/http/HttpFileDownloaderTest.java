@@ -43,6 +43,23 @@ class HttpFileDownloaderTest {
 	Path temp;
 
 	@Test
+	void safeUrlRedactsCredentialsPathAndQuery() throws Exception {
+		URL url = new URL("http://user:secret@portal.example.test:8080/live/user/pass/123.ts?token=abc");
+		String safe = HttpFileDownloader.safeUrl(url);
+		assertEquals("http://portal.example.test:8080/[redacted]", safe);
+		assertFalse(safe.contains("user"));
+		assertFalse(safe.contains("secret"));
+		assertFalse(safe.contains("pass"));
+		assertFalse(safe.contains("token"));
+	}
+
+	@Test
+	void safeUrlHandlesInvalidHostWithoutExposingUrlParts() throws Exception {
+		URL url = new URL("file:/private/playlist.m3u");
+		assertEquals("[redacted-url]", HttpFileDownloader.safeUrl(url));
+	}
+
+	@Test
 	void downloaderFactoriesKeepModelDownloadsStrictAndUserSourcesExplicit() throws Exception {
 		assertEquals(TlsTrustPolicy.STRICT, new HttpFileDownloader().tlsTrustPolicy());
 		assertEquals(TlsTrustPolicy.STRICT,
