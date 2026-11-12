@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="?attr/rippleColor">
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="#55FF354F">
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <solid android:color="#FFFFFFFF" />
-            <corners android:radius="26dp" />
+            <corners android:radius="22dp" />
         </shape>
     </item>
     <item>
         <selector>
             <item android:state_focused="true">
                 <shape>
-                    <solid android:color="?attr/colorSecondaryVariant" />
-                    <stroke android:width="2dp" android:color="?attr/colorAccent" />
-                    <corners android:radius="26dp" />
+                    <gradient android:angle="315" android:startColor="#FF1A2638" android:endColor="#FF09111D" />
+                    <stroke android:width="2dp" android:color="#FFFF354F" />
+                    <corners android:radius="22dp" />
                 </shape>
             </item>
             <item>
                 <shape>
-                    <gradient
-                        android:angle="315"
-                        android:startColor="?attr/colorPrimarySurface"
-                        android:endColor="?attr/colorSecondary" />
-                    <corners android:radius="26dp" />
-                    <stroke android:width="1dp" android:color="#1FFFFFFF" />
+                    <gradient android:angle="315" android:startColor="#FF102238" android:centerColor="#FF091522" android:endColor="#FF050A12" />
+                    <stroke android:width="1dp" android:color="#8878BCEB" />
+                    <corners android:radius="22dp" />
                 </shape>
             </item>
         </selector>
