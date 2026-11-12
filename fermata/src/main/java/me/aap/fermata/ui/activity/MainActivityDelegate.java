@@ -98,6 +98,7 @@ import me.aap.fermata.ui.fragment.NavBarMediator;
 import me.aap.fermata.ui.fragment.PlaylistsFragment;
 import me.aap.fermata.ui.fragment.RecentFragment;
 import me.aap.fermata.ui.fragment.SettingsFragment;
+import me.aap.fermata.ui.voice.VoiceSession;
 import me.aap.fermata.ui.fragment.SubtitlesFragment;
 import me.aap.fermata.ui.policy.BackNavigationPolicy;
 import me.aap.fermata.ui.policy.HostRelaunchPolicy;
