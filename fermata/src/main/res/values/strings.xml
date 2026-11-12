@@ -524,5 +524,5 @@
     <string name="dem_home_windasist" translatable="false">WindAsist ↗</string>
     <string name="web_capture_consent">Allow this website to use your camera or microphone for this app session?</string>
     <string name="web_location_consent">Allow this website to access your location for this app session?</string>
-    <string name="dashboard_brand_tagline">ABBAS CAR ASSISTANT</string>
+    <string name="dashboard_brand_tagline" translatable="false">ABBAS CAR ASSISTANT</string>
 </resources>
