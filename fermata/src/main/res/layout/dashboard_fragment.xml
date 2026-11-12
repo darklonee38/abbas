@@ -51,9 +51,41 @@
                 android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.13"
                 android:maxLines="1"
-                android:text="MEDIA  •  AI  •  AUTO"
+                android:text="DARKLONE CAR ASSISTANT"
                 android:textColor="#FF76DFC5"
                 android:textSize="9sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:background="#556A8198" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextClock
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="h:mm"
+                android:format24Hour="HH:mm"
+                android:textColor="#FFF4F7FC"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextClock
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:format12Hour="d MMM EEE"
+                android:format24Hour="d MMM EEE"
+                android:textColor="#FFB8C4D5"
+                android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 

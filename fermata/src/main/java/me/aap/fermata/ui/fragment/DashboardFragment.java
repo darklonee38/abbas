@@ -420,7 +420,7 @@ public class DashboardFragment extends MainActivityFragment
 	static int getSpanCountForWidthDp(float widthDp) {
 		if (widthDp < 460F) return 1;
 		int spans = (int) (widthDp / 220F);
-		return Math.max(2, Math.min(3, spans));
+		return Math.max(2, Math.min(4, spans));
 	}
 
 	static int getEditSpanCount(int normalSpanCount) {
