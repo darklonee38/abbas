@@ -68,7 +68,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.11"
                     android:maxLines="1"
-                    android:text="DARKLONE CAR ASSISTANT"
+                    android:text="@string/dashboard_brand_tagline"
                     android:textColor="#FF76DFC5"
                     android:textSize="9sp" />
             </LinearLayout>

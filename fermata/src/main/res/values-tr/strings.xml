@@ -530,4 +530,5 @@ Geri dönüp yeniden deneyebilir ve telefonundaki izni onaylayabilirsin.</string
     <string name="dem_mirror_external_failed">ScreenOnAuto başlatılamadı. Uygulamayı ve araç bağlantısını kontrol et.</string>
     <string name="web_capture_consent">Bu web sitesinin kamera veya mikrofon kullanmasına izin verilsin mi? Onay yalnızca bu site ve mevcut uygulama oturumu içindir.</string>
     <string name="web_location_consent">Bu web sitesinin konumunuza erişmesine izin verilsin mi? Onay yalnızca bu site ve mevcut uygulama oturumu içindir.</string>
+    <string name="dashboard_brand_tagline">ABBAS ARAÇ ASİSTANI</string>
 </resources>

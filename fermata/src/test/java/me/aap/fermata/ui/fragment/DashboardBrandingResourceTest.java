@@ -1,6 +1,7 @@
 package me.aap.fermata.ui.fragment;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -19,6 +20,8 @@ public class DashboardBrandingResourceTest {
         assertTrue(layout.contains("@drawable/abbas_header_divider"));
         assertTrue(layout.contains("@+id/dashboard_list"));
         assertTrue(layout.contains("@string/app_name"));
+        assertTrue(layout.contains("@string/dashboard_brand_tagline"));
+        assertFalse(layout.contains("DARKLONE CAR ASSISTANT"));
     }
 
     @Test
