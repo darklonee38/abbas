@@ -15,12 +15,12 @@ public final class VoiceIntentParser {
 	private static final Map<String, String> ADDON_ALIASES = new LinkedHashMap<>();
 
 	static {
-		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube'da", "youtube’dan", "youtube'dan");
-		alias("tv", "tv", "tv'de", "tv’de", "televizyonda", "televizyondan", "iptv", "ıptv", "iptv'de", "iptv’de",
+		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube'da", "youtube’dan", "youtube'dan", "youtube'u", "youtube’u", "youtube'yu", "youtube’yu");
+		alias("tv", "tv", "tv'de", "tv’de", "tv'yi", "tv’yi", "televizyonda", "televizyondan", "iptv", "ıptv", "iptv'de", "iptv’de", "iptv'yi", "iptv’yi",
 				"television", "tivi", "truyền hình", "truyen hinh", "xtream", "xtreme", "televizyon");
-		alias("radio", "radio", "radio'da", "radio’da", "đài", "dai", "radyo", "radyo'da", "radyo’da");
+		alias("radio", "radio", "radio'da", "radio’da", "đài", "dai", "radyo", "radyo'da", "radyo’da", "radyo'yu", "radyo’yu", "radyoyu");
 		alias("stremio", "stremio");
-		alias("podcast", "podcast", "podcasts", "podcast'te", "podcast’te", "podcastte");
+		alias("podcast", "podcast", "podcasts", "podcast'te", "podcast’te", "podcastte", "podcast'i", "podcast’i");
 		alias("audiobook", "audiobook", "audiobooks", "sách nói", "sach noi", "sesli kitap");
 		alias("web", "web", "browser", "trình duyệt", "trinh duyet", "tarayıcı", "tarayici");
 		alias("chatgpt", "chatgpt", "chat gpt", "gpt", "assistant", "trợ lý", "tro ly");

@@ -70,6 +70,16 @@ public class VoiceIntentParserTest {
 	}
 
 	@Test
+	public void parsesTurkishAccusativeAddonNames() {
+		Locale tr = Locale.forLanguageTag("tr");
+		assertEquals("youtube", VoiceIntentParser.parse("YouTube'u aç", tr).getAddon());
+		assertEquals("tv", VoiceIntentParser.parse("TV'yi aç", tr).getAddon());
+		assertEquals("tv", VoiceIntentParser.parse("IPTV'yi aç", tr).getAddon());
+		assertEquals("radio", VoiceIntentParser.parse("Radyoyu aç", tr).getAddon());
+		assertEquals("podcast", VoiceIntentParser.parse("Podcast'i aç", tr).getAddon());
+	}
+
+	@Test
 	public void parsesOpenAddonWithoutEmptySearch() {
 		VoiceIntent youtube = VoiceIntentParser.parse("Open YouTube", Locale.ENGLISH);
 		assertEquals(VoiceIntent.Kind.OPEN_ADDON, youtube.getKind());
