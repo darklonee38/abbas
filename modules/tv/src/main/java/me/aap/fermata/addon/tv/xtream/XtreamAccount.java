@@ -33,7 +33,7 @@ public class XtreamAccount {
 	public static final String[] SCHEMES = {"http", "https"};
 	public static final String[] OUTPUTS = {"ts", "m3u8"};
 	public static final Pref<Supplier<String>> NAME = Pref.s("XTREAM_NAME");
-	public static final Pref<IntSupplier> SCHEME = Pref.i("XTREAM_SCHEME", 0);
+	public static final Pref<IntSupplier> SCHEME = Pref.i("XTREAM_SCHEME", 1);
 	public static final Pref<Supplier<String>> HOST = Pref.s("XTREAM_HOST");
 	public static final Pref<IntSupplier> PORT = Pref.i("XTREAM_PORT", 0);
 	public static final Pref<Supplier<String>> USERNAME = Pref.s("XTREAM_USERNAME");
@@ -129,7 +129,7 @@ public class XtreamAccount {
 	}
 
 	public static Pref<IntSupplier> schemePref(int sourceId) {
-		return Pref.i("XTREAM_SCHEME#" + sourceId, 0);
+		return Pref.i("XTREAM_SCHEME#" + sourceId, 1);
 	}
 
 	public static Pref<Supplier<String>> hostPref(int sourceId) {
@@ -322,7 +322,7 @@ public class XtreamAccount {
 	}
 
 	private static int clamp(int idx, String[] values) {
-		return (idx < 0) || (idx >= values.length) ? 0 : idx;
+		return (idx < 0) || (idx >= values.length) ? 1 : idx;
 	}
 
 	private static int indexOf(String[] values, String value) {
