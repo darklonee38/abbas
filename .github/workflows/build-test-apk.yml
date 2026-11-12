@@ -7,7 +7,7 @@ name: Build test APK
 
 on:
   push:
-    branches: [feature/tv-user-playlists]
+    branches: [feature/tv-user-playlists, work/abbas-phase1-security-brand]
   workflow_dispatch:
 
 permissions:
