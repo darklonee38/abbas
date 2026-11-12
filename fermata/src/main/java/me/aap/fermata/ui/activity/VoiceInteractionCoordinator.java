@@ -159,10 +159,11 @@ final class VoiceInteractionCoordinator {
 		VoiceSession.Option option = voiceSession.resolveSelection(phrase,
 				activity.getPrefs().getLocalePref(), now);
 		if (option == null) return true;
+		long requestId = transaction.isActive() ? transaction.getGeneration() : 0L;
 		String target = option.getVoiceTarget();
 		if (target != null) {
 			if (!resolveSelection(target, option.getStableId(),
-					VoiceReadinessPolicy.deadline(android.os.SystemClock.uptimeMillis()))) {
+					VoiceReadinessPolicy.deadline(android.os.SystemClock.uptimeMillis()), requestId)) {
 				Log.e("Failed to route voice selection to addon ", target);
 			}
 			return true;
@@ -171,7 +172,6 @@ final class VoiceInteractionCoordinator {
 			if ((addon instanceof VoiceSearchAddon voice) &&
 					voice.resolveVoiceSelection(activity, option.getStableId())) return true;
 		}
-		long requestId = transaction.isActive() ? transaction.getGeneration() : 0L;
 		var selection = activity.getMediaServiceBinder().captureUserSelection();
 		activity.getLib().getItem(option.getStableId()).main(activity.getHandler()).onSuccess(item -> {
 			// Selection completion is allowed after its own transaction completes, but never
@@ -232,7 +232,9 @@ final class VoiceInteractionCoordinator {
 		return (fragment != null) && fragment.isVoiceCommandsSupported();
 	}
 
-	private boolean resolveSelection(String target, String stableId, long deadline) {
+	private boolean resolveSelection(String target, String stableId, long deadline, long requestId) {
+		// Addon activation can take several UI turns. Ignore retries superseded by a newer command.
+		if ((requestId != 0L) && !transaction.isCurrentOrCompleted(requestId)) return true;
 		AddonManager manager = AddonManager.get();
 		AddonInfo info = manager.getVoiceAddonInfo(target);
 		if (info == null) return false;
@@ -248,7 +250,8 @@ final class VoiceInteractionCoordinator {
 				deadline, alive)) return false;
 		if (!activeTarget && !activity.showFragmentWhenReady(info.addonId)) return false;
 		activity.postDelayed(() -> {
-			if (!resolveSelection(target, stableId, deadline) &&
+			if ((requestId != 0L) && !transaction.isCurrentOrCompleted(requestId)) return;
+			if (!resolveSelection(target, stableId, deadline, requestId) &&
 					(android.os.SystemClock.uptimeMillis() >= deadline)) {
 				Log.e("Failed to resolve voice selection for addon ", target);
 			}
