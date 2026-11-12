@@ -18,7 +18,7 @@ metadata = {
     'distribution': 'release',
     'versionCode': code,
     'versionName': version,
-    'packageId': 'me.app.fermataX.auto.debug',
+    'packageId': 'com.abbas.auto.debug',
     'minSdkVersion': int(re.search(r'sdkMin = "(\d+)"', versions).group(1)),
     'apkAsset': 'ABBAS-universal.apk',
     'sha256': checksum,
