@@ -19,7 +19,7 @@
 | Release signing configuration and documentation | Devam | `keystore.properties` plus `STORE_FILE`, `STORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` supported; legacy FERMATAX env names remain as fallback; secrets files ignored. Keystore generation/backup and Release upload documentation still pending |
 | Dead-code/dependency analysis and safe removals | Devam | Must verify APK contents and references before deletion |
 | ABBAS branding and README cleanup | Devam | Not started |
-| CI, APK inspection, residual scan, PR creation | Devam | CI run `43170308447` pending; prior run `43170205826` in progress on an earlier SHA. No completed APK inspection or PR yet |
+| CI, APK inspection, residual scan, PR creation | Devam | Run `43170437488` failed at Java compilation because `GithubUpdater` still called removed `repositoryAssetUrl`; fixed in `b3390df`. New CI run must complete before APK inspection |
 
 ## Guardrails
 
@@ -35,6 +35,12 @@
 - Default application ID changed from `me.app.fermataX` to `com.abbas`. The Auto release variant therefore resolves to `com.abbas.auto`; the Auto debug test/build variant resolves to `com.abbas.auto.debug`.
 - Updater manifest generator and package identity tests aligned with `com.abbas.auto.debug`.
 
+## Latest CI diagnosis and fix
+
+- Run `43170437488` failed in `:fermata:compileAutoDebugJavaWithJavac`: `GithubUpdater.java` referenced the removed `UpdateManifest.repositoryAssetUrl(JSONObject,String)` fallback.
+- Removed that obsolete raw repository/LFS fallback call. Updater now requires the declared GitHub Release manifest asset, consistent with `UpdateManifest.assetUrl()`.
+- Fix commit: `b3390df0d882c5c29fd5ca58f45525676ac546b7`.
+
 ## Next step
 
-Continue package identity audit (including remaining hard-coded package IDs), finish release-signing documentation, and inspect the latest CI run to completion. Then complete HTTP consent and secret-log audits.
+Inspect the new CI run for the fix commit. Continue package identity audit, signing docs, HTTP consent and secret-log audits; do not treat the updater as verified until the build and tests pass.
