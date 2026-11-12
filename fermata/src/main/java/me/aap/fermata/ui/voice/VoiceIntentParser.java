@@ -16,7 +16,7 @@ public final class VoiceIntentParser {
 
 	static {
 		alias("youtube", "youtube", "you tube", "yt", "youtube’da", "youtube'da", "youtube’dan", "youtube'dan", "youtube'u", "youtube’u", "youtube'yu", "youtube’yu");
-		alias("tv", "tv", "tv'de", "tv’de", "tv'yi", "tv’yi", "televizyonda", "televizyondan", "iptv", "ıptv", "iptv'de", "iptv’de", "iptv'yi", "iptv’yi",
+		alias("tv", "tv", "tv'de", "tv’de", "tv'yi", "tv’yi", "televizyonda", "televizyondan", "iptv", "ıptv", "iptv'de", "iptv’de", "iptv'yi", "iptv’yi", "ıptv'yi", "ıptv’yi",
 				"television", "tivi", "truyền hình", "truyen hinh", "xtream", "xtreme", "televizyon");
 		alias("radio", "radio", "radio'da", "radio’da", "đài", "dai", "radyo", "radyo'da", "radyo’da", "radyo'yu", "radyo’yu", "radyoyu");
 		alias("stremio", "stremio");
