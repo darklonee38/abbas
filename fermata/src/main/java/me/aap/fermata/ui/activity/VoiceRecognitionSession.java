@@ -181,8 +181,8 @@ final class VoiceRecognitionSession implements RecognitionListener,
 				keyboard.setImageResource(R.drawable.keyboard);
 				keyboard.setImageTintList(ColorStateList.valueOf(imageColor));
 				layout.setOnClickListener(view -> {
-					controller.cancel(generation);
 					promise.completeExceptionally(new OperationCanceledException());
+					destroy();
 					activity.hideActiveMenu();
 				});
 				layout.addView(keyboard);
