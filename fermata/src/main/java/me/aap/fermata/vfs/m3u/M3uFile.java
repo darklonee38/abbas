@@ -174,8 +174,10 @@ public class M3uFile implements VirtualFile {
 	@NonNull
 	@Override
 	public String toString() {
+		// Playlist URLs may embed Xtream credentials or access tokens in their path/query.
+		// Never include the raw source URL in logs or diagnostic string representations.
 		return getClass().getSimpleName() + " {" + "rid=" + rid + ", name='" + getName() + '\'' +
-				", url='" + getUrl() + '\'' + ", localFile=" + getLocalFile() + '}';
+				", url=[redacted], localFile=" + getLocalFile() + '}';
 	}
 
 	@NonNull
