@@ -2,7 +2,7 @@
 
 **Branch:** `work/abbas-phase1-security-brand`
 **Base:** `main` (`e4eca9cc1483ca59ae5a56e1fd271b1a926bb229`)
-**Last progress update:** `51c1e8e545adfba6cbabd77afc07c8d647f606f9`
+**Last progress update:** `952b47ac110bcc73feabe47217442edad914d795`
 
 ## Task status
 
@@ -16,10 +16,10 @@
 | IPTV/Xtream/Stalker secret-safe logging audit and tests | Devam | Existing redact helpers found; all call sites still require audit |
 | Package identity migration to `com.abbas.auto` | Devam | Base applicationId now `com.abbas`; Auto release resolves to `com.abbas.auto`, debug to `com.abbas.auto.debug`; updater manifest generator/tests aligned. Full provider/authority/build verification still pending |
 | Release updater endpoint and APK/signature/hash verification | Devam | Removed repository/LFS fallback; updater accepts only GitHub Release assets. Installed-signature, APK hash/size and pre-install gate still pending |
-| Release signing configuration and documentation | Devam | Not started |
+| Release signing configuration and documentation | Devam | `keystore.properties` plus `STORE_FILE`, `STORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` supported; legacy FERMATAX env names remain as fallback; secrets files ignored. Keystore generation/backup and Release upload documentation still pending |
 | Dead-code/dependency analysis and safe removals | Devam | Must verify APK contents and references before deletion |
 | ABBAS branding and README cleanup | Devam | Not started |
-| CI, APK inspection, residual scan, PR creation | Devam | No current CI/APK analysis/PR |
+| CI, APK inspection, residual scan, PR creation | Devam | CI run `43170308447` pending; prior run `43170205826` in progress on an earlier SHA. No completed APK inspection or PR yet |
 
 ## Guardrails
 
@@ -37,4 +37,4 @@
 
 ## Next step
 
-Continue package identity audit and signing configuration/documentation. CI run `43170144116` is currently building the Auto debug APK; wait for all steps before reporting results. Then complete HTTP consent and secret-log audits.
+Continue package identity audit (including remaining hard-coded package IDs), finish release-signing documentation, and inspect the latest CI run to completion. Then complete HTTP consent and secret-log audits.
