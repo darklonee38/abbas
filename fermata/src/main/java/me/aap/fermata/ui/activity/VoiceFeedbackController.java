@@ -59,6 +59,8 @@ final class VoiceFeedbackController implements Closeable {
 			speakPending();
 		}).onFailure(error -> {
 			initializing = false;
+			// A failed asynchronous initialization must not notify after the host has closed.
+			if (closed) return;
 			if ((pendingLocale != null) && !locale.equals(pendingLocale)) {
 				String latestText = pendingText;
 				Locale latestLocale = pendingLocale;
