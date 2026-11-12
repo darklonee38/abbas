@@ -78,7 +78,7 @@ final class XtreamErrorMapper {
 
 	private String describeHttpStatus(HttpStatusException error) {
 		int status = error.status;
-		String reason = isNullOrBlank(error.reason) ? "" : " " + error.reason;
+		// Server-controlled reason phrases are untrusted and may echo account credentials or URLs.\n\t\tString reason = "";
 
 		if ((status == HttpURLConnection.HTTP_UNAUTHORIZED) ||
 				(status == HttpURLConnection.HTTP_FORBIDDEN)) {
