@@ -2,7 +2,7 @@
 
 **Branch:** `work/abbas-phase1-security-brand`
 **Base:** `main` (`e4eca9cc1483ca59ae5a56e1fd271b1a926bb229`)
-**Last progress update:** pending this commit (previous reference `952b47ac...` is not an ancestor of current branch HEAD)
+**Last progress update:** 2026-11-12; current branch HEAD verified after CI diagnosis
 
 ## Task status
 
@@ -12,13 +12,13 @@
 | M3U URL normalization test | Bitti | commit `0dcf0008902c9a27e8ff12775b4baa4f795728c0` |
 | HTTPS default for schemeless Stalker portals | Bitti | commit `615eedba279847e0a600e4de228429f901920f85` |
 | Stalker HTTPS normalization tests | Bitti | commit `2496d9a5f7c6777655e3bdd29051c355adb325f2` |
-| HTTP explicit-consent enforcement for M3U/Xtream/Stalker | Devam | HTTPS is now the default for new schemeless Xtream sources (scheme preference default changed to index 1, test added); explicit HTTP remains selectable and legacy HTTP sources still need a consent gate across all network entry points |
-| IPTV/Xtream/Stalker secret-safe logging audit and tests | Devam | Added URL redaction in the shared `HttpFileDownloader` logs and safe URL formatting for its explicit HTTP errors; added unit tests for credentials/path/query and non-HTTP URLs. Commits `9e3fc9b`, `d4520f5`, `4e50a53`. Other clients, response diagnostics and exception payloads still need audit |
-| Package identity migration to `com.abbas.auto` | Devam | Base applicationId now `com.abbas`; Auto release resolves to `com.abbas.auto`, debug to `com.abbas.auto.debug`; updater manifest generator/tests aligned. Full provider/authority/build verification still pending |
+| HTTP explicit-consent enforcement for M3U/Xtream/Stalker | Devam | HTTPS is default for schemeless/new sources; explicit HTTP and legacy HTTP still lack source-bound persisted consent. Required design: source-keyed grant for M3U URL, Xtream source ID and Stalker portal; credential-bearing Xtream/Stalker warning is elevated; legacy HTTP sources are listed once at first mobile startup and individually approved; no consent dialog on TV surfaces; unapproved HTTP and HTTPS-to-HTTP redirects fail closed. No enforcement is claimed yet. |
+| IPTV/Xtream/Stalker secret-safe logging, exceptions, player UI and report audit | Devam | Shared downloader URL masking and tests exist (`9e3fc9ba6060`, `d4520f511317`, `4e50a538bdc9`, `0b23c5759b05`); Stalker/M3U partial redaction (`2c444b3dd3dc`, `30b45304b43b`). DiagnosticSanitizer already sanitizes URI/header/secret assignment and throwable stack payloads; still need ensure every ExoPlayer/UI exception path uses it, harden Xtream/Stalker error mappers and verify exported-report rejection paths with targeted tests. |
+| Package identity migration to `com.abbas.auto` | Devam | Base applicationId now `com.abbas`; Auto release resolves to `com.abbas.auto`, debug to `com.abbas.auto.debug`; updater manifest generator/tests aligned. Stale architecture assertion was fixed in `76a5f0869156`; full provider/authority/build verification still pending |
 | Release updater endpoint and APK/signature/hash verification | Devam | GitHub Release-only manifest/APK assets; APK package/version/size/SHA-256 and signer-certificate SHA-256 are checked before Android installer. CI verification pending |
-| Release signing configuration and documentation | Bitti | `keystore.properties` and `STORE_*` env supported; partial config rejected; private key files ignored; README documents key generation, offline backup, Release assets, and `REQUEST_INSTALL_PACKAGES` rationale |
+| Release signing configuration and documentation | Bitti | `keystore.properties` and `STORE_*` env supported; partial config rejected; private key files ignored; README documents key generation, offline backup, Release assets, and `REQUEST_INSTALL_PACKAGES` rationale. Commits: `b7cef6658628`, `7a7abfe08539`, `0dfd81aee9d1` |
 | Dead-code/dependency analysis and safe removals | Devam | Must verify APK contents and references before deletion |
-| ABBAS branding and README cleanup | Devam | README identifies ABBAS and removes KingInstaller/Shizuku and Dem TV directions; full resource/string/TTS scan still pending |
+| README cleanup: obsolete installer guidance | Bitti | README removed obsolete KingInstaller/Shizuku installation guidance and Dem TV alias direction cleanup. Commit: `f0bd2a1a5c7b` |\n| ABBAS package identity migration | Devam | `com.abbas` / `com.abbas.auto` / `com.abbas.auto.debug` configured; provider/authority and all-resource verification still pending. Commits: `cd266710fe5f`, `2bc226517cfa`, `9ebbd9d2e96d`, `340ecfabee36`, `4ae6b889c198` |\n| ABBAS branding and resource cleanup | Devam | README identity and obsolete installer guidance are updated; full strings/resources/TTS/diagnostics scan still pending |
 | CI, APK inspection, residual scan, PR creation | Devam | Run `43171296149` built the Auto debug universal APK successfully but failed in `verify_security_apk.py` because the audit incorrectly classified the required voice-recognition `RECORD_AUDIO` permission as forbidden. Fixed the audit to allow this documented, runtime-requested permission while retaining the other sensitive-permission denylist; fresh CI required. APK inspection/tests/lint remain pending |
 
 ## Guardrails
@@ -38,7 +38,7 @@
 - Default application ID changed from `me.app.fermataX` to `com.abbas`. The Auto release variant therefore resolves to `com.abbas.auto`; the Auto debug test/build variant resolves to `com.abbas.auto.debug`.
 - Updater manifest generator and package identity tests aligned with `com.abbas.auto.debug`.
 
-## Latest CI diagnosis and fixes
+## Latest CI diagnosis and fixes\n\n- Run `43175102940` on `0b23c5759b05`: universal Auto debug APK build, APK verification and artifact upload succeeded. Unit tests failed: `ArchitectureBoundaryTest.runtimeIdentityRemainsExplicitAndStable` still asserted the old `me.app.fermataX` application ID after migration. Updated the assertion to `com.abbas`; fix commit `76a5f0869156`. Lint and prerelease publication were skipped. A new CI run is required.\n
 
 - Run `43171296149` on `5c345ab16560f4a0e79cf5a2377063a5485ee927`: universal APK build succeeded; APK verification failed at the `RECORD_AUDIO` denylist assertion. Unit tests, lint, and release publication were skipped. The verifier fix is committed as `9eeb198d4c010f15db90a1ab4522c11f5de283a2`; rerun required.
 
@@ -53,4 +53,4 @@
 
 ## Next step
 
-Run CI on the latest source/test commits; inspect APK only after the complete workflow succeeds. Continue HTTP consent enforcement and remaining redaction audit. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
+Run CI after the architecture assertion fix; inspect APK only after the complete workflow succeeds. Continue source-bound HTTP consent enforcement and end-to-end redaction across ExoPlayer errors, UI, exceptions and exported reports. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
