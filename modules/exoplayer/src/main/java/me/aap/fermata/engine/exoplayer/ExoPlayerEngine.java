@@ -558,10 +558,13 @@ public class ExoPlayerEngine extends MediaEngineBase implements Player.Listener 
 	}
 
 	static MediaEngineException safePlaybackError(PlaybackException error) {
-		String message = (error == null) ? null : error.getMessage();
+		return new MediaEngineException("EXO_PLAYBACK_FAILED: " + safePlaybackMessage(
+				(error == null) ? null : error.getMessage()));
+	}
+
+	static String safePlaybackMessage(String message) {
 		String safe = ERROR_SANITIZER.sanitize(message);
-		if ((safe == null) || safe.isBlank()) safe = "EXO_PLAYBACK_FAILED";
-		return new MediaEngineException("EXO_PLAYBACK_FAILED: " + safe);
+		return ((safe == null) || safe.isBlank()) ? "Playback failed" : safe;
 	}
 
 	private void onPrepareTimeout() {
