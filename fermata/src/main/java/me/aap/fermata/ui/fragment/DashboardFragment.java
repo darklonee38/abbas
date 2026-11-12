@@ -113,6 +113,12 @@ public class DashboardFragment extends MainActivityFragment
 		Context localizedCtx = activity.getLocalizedContext(ctx);
 		prefs = activity.getPrefs();
 
+		View headerVoice = view.findViewById(R.id.dashboard_header_voice);
+		if (headerVoice != null) {
+			headerVoice.setVisibility(VoiceUiPolicy.showNavBarButton(activity) ? View.VISIBLE : View.GONE);
+			headerVoice.setOnClickListener(v -> activity.startGlobalVoiceControl());
+		}
+
 		RecyclerView list = view.findViewById(R.id.dashboard_list);
 		this.list = list;
 		if (activity.getRuntimeHostMode().usesAutomotivePresentation()) list.setSaveEnabled(false);

@@ -2,97 +2,149 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/abbas_dashboard_bg">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="18dp"
-        android:paddingEnd="76dp">
+        android:layout_height="82dp"
+        android:background="@drawable/abbas_header_divider">
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/abbas_header_mark_bg"
-            android:padding="4dp">
+        <ImageView
+            android:layout_width="190dp"
+            android:layout_height="76dp"
+            android:layout_gravity="center"
+            android:alpha="0.32"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/abbas_header_car" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@null"
-                android:importantForAccessibility="no"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/abbas_header_mark_bg"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/abbas_mark" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:letterSpacing="0.1"
+                    android:maxLines="1"
+                    android:text="@string/app_name"
+                    android:textColor="#FFF4F7FC"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.11"
+                    android:maxLines="1"
+                    android:text="DARKLONE CAR ASSISTANT"
+                    android:textColor="#FF76DFC5"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/dashboard_header_voice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/abbas_voice_button_bg"
+                android:contentDescription="@string/action_activate_voice_ctrl"
+                android:padding="11dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/abbas_mark" />
-        </FrameLayout>
+                android:src="@drawable/voice_microphone"
+                android:tint="#FFFFFFFF"
+                android:visibility="gone" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
-                android:letterSpacing="0.12"
-                android:maxLines="1"
-                android:text="@string/app_name"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textSize="22sp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginEnd="10dp">
 
-            <TextView
+                <ImageView
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/abbas_status_wifi" />
+
+                <ImageView
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:layout_marginStart="7dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/abbas_status_bluetooth" />
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="19dp"
+                    android:layout_marginStart="7dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/abbas_status_car" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="#556A8198" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.13"
-                android:maxLines="1"
-                android:text="DARKLONE CAR ASSISTANT"
-                android:textColor="#FF76DFC5"
-                android:textSize="9sp" />
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextClock
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="h:mm"
+                    android:format24Hour="HH:mm"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#FFF4F7FC"
+                    android:textSize="19sp" />
+
+                <TextClock
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:format12Hour="d MMM EEE"
+                    android:format24Hour="d MMM EEE"
+                    android:textColor="#FFB8C4D5"
+                    android:textSize="9sp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:background="#556A8198" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="vertical">
-
-            <TextClock
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format12Hour="h:mm"
-                android:format24Hour="HH:mm"
-                android:textColor="#FFF4F7FC"
-                android:textSize="20sp"
-                android:fontFamily="sans-serif-medium" />
-
-            <TextClock
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:format12Hour="d MMM EEE"
-                android:format24Hour="d MMM EEE"
-                android:textColor="#FFB8C4D5"
-                android:textSize="10sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/abbas_header_divider" />
+    </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dashboard_list"
