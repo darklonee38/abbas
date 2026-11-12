@@ -59,6 +59,14 @@ final class VoiceFeedbackController implements Closeable {
 			speakPending();
 		}).onFailure(error -> {
 			initializing = false;
+			if ((pendingLocale != null) && !locale.equals(pendingLocale)) {
+				String latestText = pendingText;
+				Locale latestLocale = pendingLocale;
+				pendingText = null;
+				pendingLocale = null;
+				speak(latestText, latestLocale);
+				return;
+			}
 			pendingText = null;
 			pendingLocale = null;
 			Log.e(error, "ABBAS local voice feedback is unavailable for ", locale);
