@@ -70,6 +70,15 @@ public class DiagnosticSanitizerTest {
 	}
 
 	@Test
+	public void stripsMacAddressesAndLabeledDeviceIdentifiers() {
+		String clean = sanitizer.sanitize(
+				"MAC 00:1A:79:01:02:03 serial=serial-secret device_id=device-secret");
+		assertFalse(clean.contains("00:1A:79:01:02:03"));
+		assertFalse(clean.contains("serial-secret"));
+		assertFalse(clean.contains("device-secret"));
+	}
+
+	@Test
 	public void fileAndMagnetUrisNeverLeakPayload() {
 		String clean = sanitizer.sanitize("file:///data/user/0/private.db " +
 				"magnet:?xt=urn:btih:0123456789abcdef");
