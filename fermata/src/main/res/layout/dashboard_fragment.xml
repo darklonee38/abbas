@@ -8,7 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="82dp"
-        android:background="@drawable/abbas_header_divider">
+        android:background="@drawable/abbas_dashboard_bg">
 
         <ImageView
             android:layout_width="190dp"
@@ -145,6 +145,11 @@
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/abbas_header_divider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dashboard_list"
