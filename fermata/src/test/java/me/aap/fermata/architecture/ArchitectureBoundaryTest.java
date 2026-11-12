@@ -121,7 +121,7 @@ public class ArchitectureBoundaryTest {
 	public void runtimeIdentityRemainsExplicitAndStable() throws IOException {
 		String gradle = new String(Files.readAllBytes(
 				projectRoot().resolve("fermata/build.gradle")), UTF_8);
-		assertTrue(gradle.contains("def defaultApplicationId = 'me.app.fermataX'"));
+		assertTrue(gradle.contains("def defaultApplicationId = 'com.abbas'"));
 		assertTrue(gradle.contains("namespace = 'me.aap.fermata'"));
 		assertTrue(gradle.contains("applicationId configuredApplicationId"));
 	}
