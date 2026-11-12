@@ -45,6 +45,7 @@ final class VoiceInteractionCoordinator {
 	private VoiceRecognitionSession speechListener;
 	private VoiceCommandHandler commandHandler;
 	private long nextTransactionId;
+	private long speechStartupGeneration;
 	private me.aap.utils.function.Cancellable transactionTimeout =
 			me.aap.utils.function.Cancellable.CANCELED;
 
@@ -202,6 +203,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void onHostPaused() {
+		speechStartupGeneration++;
 		voiceFeedback.stop();
 		if (speechListener != null) speechListener.destroy();
 		transaction.cancel();
@@ -210,6 +212,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void close() {
+		speechStartupGeneration++;
 		voiceFeedback.close();
 		if (speechListener != null) speechListener.destroy();
 		voiceSession.clear();
@@ -327,15 +330,22 @@ final class VoiceInteractionCoordinator {
 
 	private FutureSupplier<List<String>> startSpeechRecognizer(@Nullable String locale,
 			boolean textInput, boolean adaptiveAllowed) {
+		long startupId = ++speechStartupGeneration;
 		FutureSupplier<int[]> check = SpeechRecognitionSupport.checkRecordAudioPermission(activity);
 		return check.then(result -> {
 			if (result[0] == PERMISSION_GRANTED) return completedVoid();
 			return failed(new IllegalStateException("Audio recording permission is not granted"));
 		}).onFailure(error -> {
+			if (startupId != speechStartupGeneration) return;
 			if (!isCancellation(error)) Log.e(error, "Failed to request RECORD_AUDIO permission");
 			showAlert(activity.getContext(), R.string.err_no_audio_record_perm);
 		}).then(ignored -> SpeechRecognitionSupport.requireOnDeviceRecognitionService(activity.getContext()))
 				.then(ignored -> {
+					if (startupId != speechStartupGeneration) {
+						Promise<List<String>> stale = new Promise<>();
+						stale.cancel();
+						return stale;
+					}
 					if (speechListener != null) speechListener.destroy();
 					Promise<List<String>> promise = new Promise<>();
 					String language = (locale == null) ?
