@@ -261,7 +261,7 @@ public class TvFragment extends MediaLibFragment {
 						.onCompletion((ok, err) -> {
 							if ((err != null) && !(err instanceof CancellationException)) {
 								Log.e(err, "Failed to edit TV source ", i);
-								UiUtils.showAlert(getContext(), err.getLocalizedMessage());
+								UiUtils.showAlert(getContext(), TvErrorMessages.from(err));
 							}
 							getMainActivity().showFragment(getFragmentId());
 							if ((ok != null) && ok) refreshEditedSource(i);
@@ -320,8 +320,7 @@ public class TvFragment extends MediaLibFragment {
 					if (error != null) {
 						if (!isCancellation(error)) {
 							Log.e(error, "Failed to check Stalker source");
-							String message = error.getLocalizedMessage();
-							UiUtils.showAlert(getContext(), (message != null) ? message : error.toString());
+							UiUtils.showAlert(getContext(), TvErrorMessages.from(error));
 						}
 						return;
 					}
@@ -389,8 +388,7 @@ public class TvFragment extends MediaLibFragment {
 		Throwable err = result.error();
 		Log.e(err, "Failed to reload TV source ", source);
 		if (!showError || (err == null) || isCancellation(err) || (getContext() == null)) return;
-		String msg = err.getLocalizedMessage();
-		UiUtils.showAlert(getContext(), (msg != null) ? msg : err.toString());
+		UiUtils.showAlert(getContext(), TvErrorMessages.from(err));
 	}
 
 	@Override
@@ -467,9 +465,8 @@ public class TvFragment extends MediaLibFragment {
 		if (isCancellation(ex)) return;
 
 		App.get().getHandler().post(() -> {
-			String msg = ex.getLocalizedMessage();
 			UiUtils.showAlert(getContext(),
-					getString(R.string.err_failed_to_add_tv_source, (msg != null) ? msg : ex.toString()));
+				getString(R.string.err_failed_to_add_tv_source, TvErrorMessages.from(ex)));
 		});
 	}
 
