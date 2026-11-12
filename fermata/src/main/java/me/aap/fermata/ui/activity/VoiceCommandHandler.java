@@ -234,10 +234,8 @@ class VoiceCommandHandler {
 			}
 			if (aSubChange.matcher(cmd).matches()) {
 				eng.getSubtitleStreamInfo().main().onSuccess(sub -> {
-					if (sub.isEmpty()) return;
-					var cur = eng.getCurrentSubtitleStreamInfo();
-					if (cur == null) eng.setCurrentSubtitleStream(sub.get(0));
-					else eng.setCurrentSubtitleStream(next(sub, cur));
+					var selected = nextSubtitleStream(sub, eng.getCurrentSubtitleStreamInfo());
+					if (selected != null) eng.setCurrentSubtitleStream(selected);
 				});
 				recordCommand("subtitle");
 				return true;
@@ -517,6 +515,11 @@ class VoiceCommandHandler {
 			if (nums[i].equals(n) || nums[i].contains(v1) || nums[i].contains(v2)) return i;
 		}
 		return -1;
+	}
+
+	static <T> T nextSubtitleStream(List<T> streams, T current) {
+		if (streams.isEmpty()) return null;
+		return (current == null) ? streams.get(0) : next(streams, current);
 	}
 
 	private static <T> T next(List<T> l, T t) {
