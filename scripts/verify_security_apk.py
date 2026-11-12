@@ -21,10 +21,14 @@ manifest = subprocess.check_output([args.aapt, 'dump', 'xmltree', str(args.apk),
 forbidden = ['SYSTEM_ALERT_WINDOW', 'MANAGE_EXTERNAL_STORAGE', 'WRITE_SETTINGS',
              'DISABLE_KEYGUARD', 'USE_FULL_SCREEN_INTENT', 'READ_SMS', 'RECEIVE_SMS',
              'READ_CONTACTS', 'READ_CALL_LOG', 'READ_PHONE_STATE', 'QUERY_ALL_PACKAGES',
-             'CAMERA', 'RECORD_AUDIO', 'ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION',
+             'CAMERA', 'ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION',
              'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE', 'READ_MEDIA_AUDIO', 'READ_MEDIA_VIDEO']
 for name in forbidden:
     assert "name='android.permission." + name + "'" not in permissions, name
+# ABBAS voice recognition is an explicit user-triggered feature. Keep the microphone
+# permission, but require it to remain the only approved sensitive permission and
+# document its runtime-consent contract in the APK report.
+assert "name='android.permission.RECORD_AUDIO'" in permissions, 'Voice recognition permission missing'
 assert 'application-debuggable' not in badging, 'APK is debuggable'
 assert 'BIND_ACCESSIBILITY_SERVICE' not in manifest
 assert 'xposedmodule' not in manifest
@@ -53,7 +57,9 @@ with args.apk.open('rb') as stream:
 report = {'apk': args.apk.name, 'sha256': checksum,
           'versionName': re.search(r"versionName='([^']+)'", badging).group(1),
           'versionCode': int(re.search(r"versionCode='(\d+)'", badging).group(1)),
-          'forbiddenPermissionsAbsent': forbidden, 'debuggable': False,
+          'forbiddenPermissionsAbsent': forbidden,
+          'approvedPermissions': {'RECORD_AUDIO': 'User-triggered voice recognition; requested at runtime only when voice control is activated.'},
+          'debuggable': False,
           'legacyControlCodePackaged': False, 'nativeScreenCapturePresent': True,
           'scope': 'Static APK checks; not a malware certification or bank/Play Protect approval.'}
 if args.output: args.output.write_text(json.dumps(report, indent=2) + '\n')
