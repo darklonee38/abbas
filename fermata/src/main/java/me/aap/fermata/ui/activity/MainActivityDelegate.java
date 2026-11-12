@@ -1170,7 +1170,13 @@ public class MainActivityDelegate extends ActivityDelegate
 				startSpeechRecognizer(null, true).onSuccess(q -> {
 					if ((q != null) && !q.isEmpty()) t.setText(q.get(0));
 				})
-						.onCompletion((result, fail) -> voiceInteraction.beginCommand());
+						.onCompletion((result, fail) -> {
+							// Do not let this older text-input session overwrite a newer
+							// command or selection mode.
+							if (voiceInteraction.getMode() == VoiceSession.Mode.TEXT_INPUT) {
+								voiceInteraction.beginCommand();
+							}
+						});
 				return true;
 			});
 		}
