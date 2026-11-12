@@ -16,12 +16,12 @@ public class StalkerAccountTest {
 				null, null, null, 30);
 
 		assertTrue(account.isComplete());
-		assertEquals("http://portal.example.invalid/stalker_portal", account.getPortal());
+		assertEquals("https://portal.example.invalid/stalker_portal", account.getPortal());
 		assertEquals("00:1A:79:01:02:AF", account.getMac());
 		assertEquals("portal.example.invalid", account.getName());
 		assertEquals(List.of(
-				"http://portal.example.invalid/stalker_portal/server/load.php",
-				"http://portal.example.invalid/stalker_portal/portal.php"),
+				"https://portal.example.invalid/stalker_portal/server/load.php",
+				"https://portal.example.invalid/stalker_portal/portal.php"),
 				account.getEndpointCandidates());
 	}
 
