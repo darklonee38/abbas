@@ -158,6 +158,7 @@
 
     <string name="voice_search">Sesli arama</string>
     <string name="voice_control">Sesli kontrol</string>
+    <string name="voice_control_section_sub">Mevcut ABBAS asistanını, araç tetikleyicisini, sesli geri bildirimi ve tanıma dilini yapılandırın.</string>
     <string name="voice_control_fb">Kayan düğme</string>
     <string name="voice_control_sub_long">Uzun dokununca ses kontrolünü etkinleştir</string>
     <string name="voice_control_subst">Kelime değiştirme</string>
