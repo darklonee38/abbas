@@ -113,9 +113,15 @@ final class VoiceRecognitionSession implements RecognitionListener,
 			}
 		}
 		clearPausedPlayback();
-		recognizer.destroy();
-		promise.cancel();
-		activity.clearVoiceRecognitionSession(this);
+		try {
+			recognizer.destroy();
+		} catch (RuntimeException ex) {
+			// A provider teardown failure must not leave this session registered or pending.
+			Log.e(ex, "Failed to destroy speech recognizer");
+		} finally {
+			promise.cancel();
+			activity.clearVoiceRecognitionSession(this);
+		}
 	}
 
 	void applyCommandOutcome(VoiceCommandOutcome outcome) {
