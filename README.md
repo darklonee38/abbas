@@ -1,6 +1,5 @@
 # ABBAS
 
-_Eski adı: Dem TV._
 
 TV/IPTV izleme, YouTube, tarayıcı ve izinle ekran yansıtma için Türkçe Android uygulaması.
 
@@ -8,7 +7,7 @@ TV/IPTV izleme, YouTube, tarayıcı ve izinle ekran yansıtma için Türkçe And
 
 ## Sürüm durumu
 
-> **ÖNEMLİ:** Önce ABBAS’yı kurun. Kurulumdan sonra Android Auto’da görünmüyorsa [bu videodaki](https://www.youtube.com/watch?v=CdU0OlLds2k) işlemleri uygulayın (Shizuku kurulum rehberi). Ardından ABBAS’yı [KingInstaller](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk) uygulamasıyla Shizuku seçeneği açıkken tekrar yükleyin; Android Auto’da çalışacaktır ❤
+> **Not:** Android Auto görünürlüğü telefon, Android Auto sürümü ve Google’ın uygulama kategorisi/dağıtım kurallarına bağlıdır. Standart Android paket yükleyicisi kullanılır; görünürlük veya uyumluluk garantisi verilmez.
 
 **ABBAS — ilk yeniden markalanmış sürüm bekleniyor** — [APK’yı indir](https://github.com/darklonee38/abbas/releases/latest)
 
@@ -23,7 +22,7 @@ TV/IPTV izleme, YouTube, tarayıcı ve izinle ekran yansıtma için Türkçe And
 
 2.1.7 ve sonrası yeni bir imza anahtarıyla derlenir; telefonda daha eski bir ABBAS kuruluysa önce onu kaldırın. Fiziksel telefon ve araç testi yapılmadı.
 
-2.1.4, kullanıcıların TV/YouTube açarken kapanma bildirmesi üzerine kararlı sürüm listesinden geri çekildi. **Kullanıcı 2.1.5’in çalıştığını bildirdi; normal kurulumla Android Auto’da görünmediği de bildirildi.** KingInstaller ile araç doğrulaması beklenmektedir; sürüm ön sürüm olarak kalır. Kapanmanın kesin nedeni cihaz hata kaydı olmadan doğrulanmış sayılmaz. Ön sürüm otomatik güncelleme olarak önerilmez.
+2.1.4, kullanıcıların TV/YouTube açarken kapanma bildirmesi üzerine kararlı sürüm listesinden geri çekildi. **Kullanıcı 2.1.5’in çalıştığını bildirdi; normal kurulumla Android Auto’da görünmediği de bildirildi.** Android Auto görünürlüğü doğrulaması beklenmektedir; sürüm ön sürüm olarak kalır. Kapanmanın kesin nedeni cihaz hata kaydı olmadan doğrulanmış sayılmaz. Ön sürüm otomatik güncelleme olarak önerilmez.
 
 ## Kapsam
 
@@ -35,7 +34,7 @@ Ekran yansıtma Android’in MediaProjection iznini ister. Android Auto telefon 
 
 ## Android Auto
 
-APK’da KingInstaller bağımlılığı, kurulum kaynağını taklit eden kod, erişilebilirlik servisi, root veya Xposed yoktur. Telefona standart Android yükleyicisiyle kurulabilir; Android Auto’da görünmeyen kurulumlar için KingInstaller 2.3 üzerinden kurulum yöntemi kullanılabilir. KingInstaller ayrı bir üçüncü taraf yükleyicidir. [Resmî APK indirme](https://github.com/fcaronte/KingInstaller/releases/download/2.3/KingInstaller-v2.3.apk). **Bu, her telefonda Android Auto’nun uygulamayı kabul edeceği anlamına gelmez.** Özel video/tarayıcı/yansıtma arayüzü eski projection SDK’sını kullanır; Google’ın dağıtım kuralları, telefon ve Android Auto sürümü görünürlüğü belirler. Google onayı veya bütün yeni Android sürümlerinde sorunsuz çalışma garantisi verilmez.
+Uygulama standart Android paket yükleyicisiyle kurulur. ABBAS’ın Android Auto’da görünmesi; Android Auto/telefon sürümüne, uygulamanın araç ekranı kategorisine ve Google’ın dağıtım kurallarına bağlıdır. Özel video/tarayıcı/yansıtma arayüzü eski projection SDK’sını kullanır; Google onayı veya tüm cihazlarda görünürlük garantisi verilmez.
 
 ## Doğrulama ve derleme
 
