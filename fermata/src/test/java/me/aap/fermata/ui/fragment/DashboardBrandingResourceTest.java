@@ -35,9 +35,14 @@ public class DashboardBrandingResourceTest {
     }
 
     private static String read(String path) throws Exception {
-        Path file = Paths.get(System.getProperty("user.dir")).resolve(path);
+        Path workingDirectory = Paths.get(System.getProperty("user.dir"));
+        Path file = workingDirectory.resolve(path);
         if (!Files.isRegularFile(file)) {
-            throw new AssertionError("Missing dashboard branding resource: " + path);
+            file = workingDirectory.resolve("..").resolve(path).normalize();
+        }
+        if (!Files.isRegularFile(file)) {
+            throw new AssertionError("Missing dashboard branding resource: " + path
+                    + " (working directory: " + workingDirectory + ")");
         }
         return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
     }
