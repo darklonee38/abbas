@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import me.aap.fermata.BuildConfig;
@@ -152,13 +151,21 @@ public final class UpdateActivity extends AppCompatActivity {
                 PackageInfo archive = manager.getPackageArchiveInfo(apk.getAbsolutePath(), PackageManager.GET_SIGNING_CERTIFICATES);
                 PackageInfo installed = manager.getPackageInfo(getPackageName(), PackageManager.GET_SIGNING_CERTIFICATES);
                 if (archive == null || !getPackageName().equals(archive.packageName) ||
-                        archive.getLongVersionCode() != update.versionCode() || archive.signingInfo == null ||
-                        installed.signingInfo == null || !Arrays.equals(archive.signingInfo.getApkContentsSigners(),
-                        installed.signingInfo.getApkContentsSigners())) throw new IOException("APK identity mismatch");
+                        archive.getLongVersionCode() != update.versionCode() ||
+                        !MessageDigest.isEqual(signerSha256(archive), signerSha256(installed)))
+                    throw new IOException("APK identity or signing certificate SHA-256 mismatch");
                 File downloaded = apk;
                 ui(() -> { verifiedApk = downloaded; installVerified(); });
             } catch (Exception error) { if (apk != null) apk.delete(); failed(); }
         });
+    }
+
+    private static byte[] signerSha256(PackageInfo info) throws Exception {
+        if (info.signingInfo == null) throw new IOException("APK signing certificate unavailable");
+        android.content.pm.Signature[] signers = info.signingInfo.getApkContentsSigners();
+        if (signers == null || signers.length != 1)
+            throw new IOException("Multiple or missing APK signers are not supported");
+        return MessageDigest.getInstance("SHA-256").digest(signers[0].toByteArray());
     }
 
     private void installVerified() {
