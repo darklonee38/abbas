@@ -272,6 +272,9 @@ final class VoiceInteractionCoordinator {
 		else if (voiceSession.getMode() != VoiceSession.Mode.SELECTION) voiceSession.beginCommand();
 		boolean adaptiveAllowed = !textInput && (voiceSession.getMode() == VoiceSession.Mode.COMMAND);
 		startSpeechRecognizer(null, textInput, adaptiveAllowed).onSuccess(results -> {
+			// A newer global interaction may have superseded this recognizer while it was listening.
+			// Discard its transcript before it can route a command or speak stale feedback.
+			if ((requestId != 0L) && !transaction.isCurrent(requestId)) return;
 			if ((results == null) || results.isEmpty()) {
 				if (!textInput) {
 					Locale locale = Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity));
