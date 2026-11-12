@@ -18,6 +18,8 @@ public class VoicePrefsBuilderResourceTest {
         String turkish = read("fermata/src/main/res/values-tr/strings.xml");
 
         assertTrue(builder.contains("o.subtitle = R.string.voice_control_section_sub;"));
+        assertTrue(builder.contains("refresh.accept(voice);"));
+        assertTrue(builder.contains("Consumer<PreferenceSet> refresh"));
         assertTrue(english.contains("voice_control_section_sub"));
         assertTrue(english.contains("existing ABBAS assistant"));
         assertTrue(turkish.contains("voice_control_section_sub"));

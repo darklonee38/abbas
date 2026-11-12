@@ -341,7 +341,7 @@ public class SettingsFragment extends MainActivityFragment
 		MediaEnginePrefsBuilder.add(a, playback, mediaPrefs, isCar);
 
 		// Keep ABBAS voice controls in the main settings tree for phone and mirror hosts.
-		VoicePrefsBuilder.add(a, set);
+		VoicePrefsBuilder.add(a, set, this::refreshPrefs);
 
 
 
