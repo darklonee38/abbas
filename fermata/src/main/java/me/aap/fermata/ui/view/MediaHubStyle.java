@@ -91,7 +91,7 @@ public final class MediaHubStyle {
                         ColorUtils.setAlphaComponent(base, 195)});
         shape.setCornerRadius(dp(context, featured ? 26 : 20));
         shape.setStroke(Math.max(1, Math.round(dp(context, focused ? 2 : 1))),
-                focused ? accent : 0x48FFFFFF);
+                ColorUtils.setAlphaComponent(accent, focused ? 255 : 150));
 		return shape;
 	}
 

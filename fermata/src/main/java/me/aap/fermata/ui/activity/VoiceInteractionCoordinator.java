@@ -45,6 +45,7 @@ final class VoiceInteractionCoordinator {
 	private VoiceRecognitionSession speechListener;
 	private VoiceCommandHandler commandHandler;
 	private long nextTransactionId;
+	private long speechStartupGeneration;
 	private me.aap.utils.function.Cancellable transactionTimeout =
 			me.aap.utils.function.Cancellable.CANCELED;
 
@@ -136,8 +137,14 @@ final class VoiceInteractionCoordinator {
 		voiceSession.clear();
 	}
 
-	void beginTextInput() {
+	long beginTextInput() {
 		voiceSession.beginTextInput();
+		return voiceSession.getGeneration();
+	}
+
+	boolean isCurrentTextInput(long generation) {
+		return (voiceSession.getMode() == VoiceSession.Mode.TEXT_INPUT) &&
+				(voiceSession.getGeneration() == generation);
 	}
 
 	void beginCommand() {
@@ -159,10 +166,11 @@ final class VoiceInteractionCoordinator {
 		VoiceSession.Option option = voiceSession.resolveSelection(phrase,
 				activity.getPrefs().getLocalePref(), now);
 		if (option == null) return true;
+		long requestId = transaction.isActive() ? transaction.getGeneration() : 0L;
 		String target = option.getVoiceTarget();
 		if (target != null) {
 			if (!resolveSelection(target, option.getStableId(),
-					VoiceReadinessPolicy.deadline(android.os.SystemClock.uptimeMillis()))) {
+					VoiceReadinessPolicy.deadline(android.os.SystemClock.uptimeMillis()), requestId)) {
 				Log.e("Failed to route voice selection to addon ", target);
 			}
 			return true;
@@ -173,6 +181,9 @@ final class VoiceInteractionCoordinator {
 		}
 		var selection = activity.getMediaServiceBinder().captureUserSelection();
 		activity.getLib().getItem(option.getStableId()).main(activity.getHandler()).onSuccess(item -> {
+			// Selection completion is allowed after its own transaction completes, but never
+			// after a newer request or explicit cancellation supersedes it.
+			if ((requestId != 0L) && !transaction.isCurrentOrCompleted(requestId)) return;
 			if (item instanceof PlayableItem playable) {
 				activity.getBody().playSelection(selection, playable, -1);
 				if (!selection.forwardToCar()) activity.goToItem(playable);
@@ -198,6 +209,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void onHostPaused() {
+		speechStartupGeneration++;
 		voiceFeedback.stop();
 		if (speechListener != null) speechListener.destroy();
 		transaction.cancel();
@@ -206,6 +218,7 @@ final class VoiceInteractionCoordinator {
 	}
 
 	void close() {
+		speechStartupGeneration++;
 		voiceFeedback.close();
 		if (speechListener != null) speechListener.destroy();
 		voiceSession.clear();
@@ -228,7 +241,9 @@ final class VoiceInteractionCoordinator {
 		return (fragment != null) && fragment.isVoiceCommandsSupported();
 	}
 
-	private boolean resolveSelection(String target, String stableId, long deadline) {
+	private boolean resolveSelection(String target, String stableId, long deadline, long requestId) {
+		// Addon activation can take several UI turns. Ignore retries superseded by a newer command.
+		if ((requestId != 0L) && !transaction.isCurrentOrCompleted(requestId)) return true;
 		AddonManager manager = AddonManager.get();
 		AddonInfo info = manager.getVoiceAddonInfo(target);
 		if (info == null) return false;
@@ -244,7 +259,8 @@ final class VoiceInteractionCoordinator {
 				deadline, alive)) return false;
 		if (!activeTarget && !activity.showFragmentWhenReady(info.addonId)) return false;
 		activity.postDelayed(() -> {
-			if (!resolveSelection(target, stableId, deadline) &&
+			if ((requestId != 0L) && !transaction.isCurrentOrCompleted(requestId)) return;
+			if (!resolveSelection(target, stableId, deadline, requestId) &&
 					(android.os.SystemClock.uptimeMillis() >= deadline)) {
 				Log.e("Failed to resolve voice selection for addon ", target);
 			}
@@ -272,6 +288,9 @@ final class VoiceInteractionCoordinator {
 		else if (voiceSession.getMode() != VoiceSession.Mode.SELECTION) voiceSession.beginCommand();
 		boolean adaptiveAllowed = !textInput && (voiceSession.getMode() == VoiceSession.Mode.COMMAND);
 		startSpeechRecognizer(null, textInput, adaptiveAllowed).onSuccess(results -> {
+			// A newer global interaction may have superseded this recognizer while it was listening.
+			// Discard its transcript before it can route a command or speak stale feedback.
+			if ((requestId != 0L) && !transaction.isCurrent(requestId)) return;
 			if ((results == null) || results.isEmpty()) {
 				if (!textInput) {
 					Locale locale = Locale.forLanguageTag(activity.getPrefs().getVoiceControlLang(activity));
@@ -307,21 +326,32 @@ final class VoiceInteractionCoordinator {
 				}
 			}
 		}).onCompletion((result, fail) -> {
-			if (textInput) voiceSession.beginCommand();
+			// A completed text-input recognizer must not reset the mode of a newer
+			// global voice transaction that started while this recognizer was finishing.
+			if (textInput && ((requestId == 0L) || transaction.isCurrent(requestId))) {
+				voiceSession.beginCommand();
+			}
 		});
 	}
 
 	private FutureSupplier<List<String>> startSpeechRecognizer(@Nullable String locale,
 			boolean textInput, boolean adaptiveAllowed) {
+		long startupId = ++speechStartupGeneration;
 		FutureSupplier<int[]> check = SpeechRecognitionSupport.checkRecordAudioPermission(activity);
 		return check.then(result -> {
 			if (result[0] == PERMISSION_GRANTED) return completedVoid();
 			return failed(new IllegalStateException("Audio recording permission is not granted"));
 		}).onFailure(error -> {
+			if (startupId != speechStartupGeneration) return;
 			if (!isCancellation(error)) Log.e(error, "Failed to request RECORD_AUDIO permission");
 			showAlert(activity.getContext(), R.string.err_no_audio_record_perm);
 		}).then(ignored -> SpeechRecognitionSupport.requireOnDeviceRecognitionService(activity.getContext()))
 				.then(ignored -> {
+					if (startupId != speechStartupGeneration) {
+						Promise<List<String>> stale = new Promise<>();
+						stale.cancel();
+						return stale;
+					}
 					if (speechListener != null) speechListener.destroy();
 					Promise<List<String>> promise = new Promise<>();
 					String language = (locale == null) ?

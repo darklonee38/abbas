@@ -613,7 +613,13 @@ public abstract class MediaLibFragment extends MainActivityFragment implements M
 			a.beginVoiceSelection(voiceRequestId, items);
 			getAdapter().setParent(f);
 			PlayableItem first = items.get(0);
-			a.post(() -> getListView().focusTo(first));
+			// The result list may be displayed after another command has superseded
+			// this search; keep its delayed focus operation within the owning generation.
+			a.post(() -> {
+				if ((voiceRequestId == 0L) || a.isCurrentVoiceTransaction(voiceRequestId)) {
+					getListView().focusTo(first);
+				}
+			});
 		});
 	}
 

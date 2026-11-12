@@ -98,6 +98,7 @@ import me.aap.fermata.ui.fragment.NavBarMediator;
 import me.aap.fermata.ui.fragment.PlaylistsFragment;
 import me.aap.fermata.ui.fragment.RecentFragment;
 import me.aap.fermata.ui.fragment.SettingsFragment;
+import me.aap.fermata.ui.voice.VoiceSession;
 import me.aap.fermata.ui.fragment.SubtitlesFragment;
 import me.aap.fermata.ui.policy.BackNavigationPolicy;
 import me.aap.fermata.ui.policy.HostRelaunchPolicy;
@@ -1104,7 +1105,7 @@ public class MainActivityDelegate extends ActivityDelegate
 	}
 
 	public boolean isCurrentVoiceTransaction(long requestId) {
-		return voiceInteraction.isCurrentTransaction(requestId);
+		return (requestId == 0L) || voiceInteraction.isCurrentTransaction(requestId);
 	}
 
 	public void completeVoiceTransaction(long requestId) {
@@ -1119,6 +1120,7 @@ public class MainActivityDelegate extends ActivityDelegate
 	public boolean resolveVoiceSelection(String phrase) {
 		return voiceInteraction.resolveSelection(phrase);
 	}
+
 
 	public FutureSupplier<List<String>> startSpeechRecognizer() {
 		return voiceInteraction.startSpeechRecognizer();
@@ -1161,11 +1163,18 @@ public class MainActivityDelegate extends ActivityDelegate
 		EditText t = getAppActivity().createEditText(ctx);
 		if (isCarActivity() && getPrefs().getVoiceControlEnabledPref()) {
 			t.setOnLongClickListener(v -> {
-				voiceInteraction.beginTextInput();
+				long textInputGeneration = voiceInteraction.beginTextInput();
 				startSpeechRecognizer(null, true).onSuccess(q -> {
-					if ((q != null) && !q.isEmpty()) t.setText(q.get(0));
+					if (voiceInteraction.isCurrentTextInput(textInputGeneration) &&
+							(q != null) && !q.isEmpty()) t.setText(q.get(0));
 				})
-						.onCompletion((result, fail) -> voiceInteraction.beginCommand());
+						.onCompletion((result, fail) -> {
+							// Do not let this older text-input session overwrite a newer
+							// command or selection mode.
+							if (voiceInteraction.isCurrentTextInput(textInputGeneration)) {
+								voiceInteraction.beginCommand();
+							}
+						});
 				return true;
 			});
 		}

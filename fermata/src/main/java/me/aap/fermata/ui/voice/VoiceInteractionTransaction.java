@@ -59,6 +59,12 @@ public final class VoiceInteractionTransaction {
 		return (requestId != 0L) && (requestId == generation) && isActive();
 	}
 
+	/** Accepts a result for the same generation after normal completion, but not after cancellation or failure. */
+	public boolean isCurrentOrCompleted(long requestId) {
+		return (requestId != 0L) && (requestId == generation) &&
+				(isActive() || (state == State.COMPLETED));
+	}
+
 	public boolean isActive() {
 		return switch (state) {
 			case LISTENING, ROUTING, RESOLVING, CLARIFYING, EXECUTING -> true;

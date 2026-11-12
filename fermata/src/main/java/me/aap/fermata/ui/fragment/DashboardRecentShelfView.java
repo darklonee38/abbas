@@ -76,14 +76,14 @@ public final class DashboardRecentShelfView extends LinearLayout {
 		this.activity = activity;
 		this.favorites = favorites;
 		Context localized = activity.getLocalizedContext(getContext());
-		heading.setText(localized.getString(favorites ? R.string.dashboard_favorites_shelf :
+		heading.setText((favorites ? "★  " : "◷  ") + localized.getString(favorites ? R.string.dashboard_favorites_shelf :
 				R.string.dashboard_recent_shelf) + "  ›");
 		heading.setContentDescription(localized.getString(favorites ? R.string.favorites :
 				R.string.recent));
 		empty.setText(localized.getString(favorites ? R.string.dashboard_favorites_empty :
 				R.string.dashboard_recent_empty));
 		float fontScale = Math.max(1F, Math.min(2F, getResources().getConfiguration().fontScale));
-		row.getLayoutParams().height = dp(160 + Math.round(60 * (fontScale - 1F)));
+		row.getLayoutParams().height = dp(108 + Math.round(40 * (fontScale - 1F)));
 		row.requestLayout();
 		int request = ++generation;
 		(favorites ? activity.getLib().getFavorites() : activity.getLib().getRecent())

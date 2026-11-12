@@ -10,7 +10,7 @@
     <dimen name="dashboard_content_padding">10dp</dimen>
     <dimen name="dashboard_card_margin">6dp</dimen>
 
-    <dimen name="dashboard_tile_height">244dp</dimen>
+    <dimen name="dashboard_tile_height">184dp</dimen>
 	<dimen name="dashboard_tile_padding">16dp</dimen>
 	<dimen name="dashboard_tile_icon_size">56dp</dimen>
 	<dimen name="dashboard_tile_icon_padding">3dp</dimen>
@@ -20,7 +20,6 @@
 
 	<dimen name="dashboard_smart_height">140dp</dimen>
 	<dimen name="dashboard_smart_mobile_height">176dp</dimen>
-	<!-- V2 cold baseline is width-class invariant; runtime height changes only by font-scale bucket. -->
 	<dimen name="dashboard_smart_v2_compact_height">152dp</dimen>
 	<dimen name="dashboard_smart_v2_standard_height">152dp</dimen>
 	<dimen name="dashboard_smart_v2_expanded_height">152dp</dimen>
@@ -43,5 +42,5 @@
     <dimen name="dashboard_smart_actions_start_margin">0dp</dimen>
     <dimen name="dashboard_smart_mobile_divider_gap">6dp</dimen>
     <dimen name="dashboard_smart_mobile_recent_top_padding">4dp</dimen>
-    <dimen name="dashboard_compact_height">100dp</dimen>
+    <dimen name="dashboard_compact_height">184dp</dimen>
 </resources>

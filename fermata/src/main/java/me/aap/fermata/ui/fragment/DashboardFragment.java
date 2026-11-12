@@ -113,6 +113,12 @@ public class DashboardFragment extends MainActivityFragment
 		Context localizedCtx = activity.getLocalizedContext(ctx);
 		prefs = activity.getPrefs();
 
+		View headerVoice = view.findViewById(R.id.dashboard_header_voice);
+		if (headerVoice != null) {
+			headerVoice.setVisibility(VoiceUiPolicy.showNavBarButton(activity) ? View.VISIBLE : View.GONE);
+			headerVoice.setOnClickListener(v -> activity.startGlobalVoiceControl());
+		}
+
 		RecyclerView list = view.findViewById(R.id.dashboard_list);
 		this.list = list;
 		if (activity.getRuntimeHostMode().usesAutomotivePresentation()) list.setSaveEnabled(false);
@@ -420,7 +426,7 @@ public class DashboardFragment extends MainActivityFragment
 	static int getSpanCountForWidthDp(float widthDp) {
 		if (widthDp < 460F) return 1;
 		int spans = (int) (widthDp / 220F);
-		return Math.max(2, Math.min(3, spans));
+		return Math.max(2, Math.min(4, spans));
 	}
 
 	static int getEditSpanCount(int normalSpanCount) {

@@ -113,9 +113,15 @@ final class VoiceRecognitionSession implements RecognitionListener,
 			}
 		}
 		clearPausedPlayback();
-		recognizer.destroy();
-		promise.cancel();
-		activity.clearVoiceRecognitionSession(this);
+		try {
+			recognizer.destroy();
+		} catch (RuntimeException ex) {
+			// A provider teardown failure must not leave this session registered or pending.
+			Log.e(ex, "Failed to destroy speech recognizer");
+		} finally {
+			promise.cancel();
+			activity.clearVoiceRecognitionSession(this);
+		}
 	}
 
 	void applyCommandOutcome(VoiceCommandOutcome outcome) {
@@ -181,8 +187,8 @@ final class VoiceRecognitionSession implements RecognitionListener,
 				keyboard.setImageResource(R.drawable.keyboard);
 				keyboard.setImageTintList(ColorStateList.valueOf(imageColor));
 				layout.setOnClickListener(view -> {
-					controller.cancel(generation);
 					promise.completeExceptionally(new OperationCanceledException());
+					destroy();
 					activity.hideActiveMenu();
 				});
 				layout.addView(keyboard);

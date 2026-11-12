@@ -17,6 +17,7 @@ final class VoiceFeedbackController implements Closeable {
 	private final Context context;
 	private TextToSpeech engine;
 	private Locale engineLocale;
+	private Locale pendingLocale;
 	private boolean initializing;
 	private boolean closed;
 	private boolean unavailableNotified;
@@ -29,6 +30,7 @@ final class VoiceFeedbackController implements Closeable {
 	void speak(String message, Locale locale) {
 		if (closed || message == null || message.isBlank() || locale == null) return;
 		pendingText = message;
+		pendingLocale = locale;
 		if (engine != null && locale.equals(engineLocale)) {
 			speakPending();
 			return;
@@ -46,13 +48,29 @@ final class VoiceFeedbackController implements Closeable {
 				created.close();
 				return;
 			}
+			if ((pendingLocale != null) && !locale.equals(pendingLocale)) {
+				created.close();
+				speak(pendingText, pendingLocale);
+				return;
+			}
 			engine = created;
 			engineLocale = locale;
 			unavailableNotified = false;
 			speakPending();
 		}).onFailure(error -> {
 			initializing = false;
+			// A failed asynchronous initialization must not notify after the host has closed.
+			if (closed) return;
+			if ((pendingLocale != null) && !locale.equals(pendingLocale)) {
+				String latestText = pendingText;
+				Locale latestLocale = pendingLocale;
+				pendingText = null;
+				pendingLocale = null;
+				speak(latestText, latestLocale);
+				return;
+			}
 			pendingText = null;
+			pendingLocale = null;
 			Log.e(error, "ABBAS local voice feedback is unavailable for ", locale);
 			if (!unavailableNotified) {
 				Toast.makeText(context, offlineVoiceMessage(locale), Toast.LENGTH_LONG).show();
@@ -72,6 +90,7 @@ final class VoiceFeedbackController implements Closeable {
 	private void speakPending() {
 		String message = pendingText;
 		pendingText = null;
+		pendingLocale = null;
 		if ((engine == null) || (message == null) || message.isBlank()) return;
 		engine.speak(message).onFailure(error ->
 				Log.e(error, "ABBAS failed to speak local voice feedback"));
@@ -79,6 +98,7 @@ final class VoiceFeedbackController implements Closeable {
 
 	void stop() {
 		pendingText = null;
+		pendingLocale = null;
 		if (engine != null) engine.stop();
 	}
 
@@ -87,6 +107,7 @@ final class VoiceFeedbackController implements Closeable {
 		if (closed) return;
 		closed = true;
 		pendingText = null;
+		pendingLocale = null;
 		if (engine != null) {
 			engine.close();
 			engine = null;

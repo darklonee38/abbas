@@ -48,6 +48,32 @@ public class VoiceSessionTest {
 	}
 
 	@Test
+	public void olderTextInputCompletionCannotResetNewerTextInput() {
+		VoiceSession s = new VoiceSession();
+		s.beginTextInput();
+		long older = s.getGeneration();
+
+		s.beginTextInput();
+		long newer = s.getGeneration();
+
+		assertEquals(false, older == newer);
+		assertEquals(VoiceSession.Mode.TEXT_INPUT, s.getMode());
+		assertEquals(true, s.getGeneration() == newer);
+	}
+
+	@Test
+	public void stateTransitionsInvalidatePreviousInteractionGeneration() {
+		VoiceSession s = new VoiceSession();
+		s.beginTextInput();
+		long textInput = s.getGeneration();
+
+		s.beginCommand();
+
+		assertEquals(false, textInput == s.getGeneration());
+		assertEquals(VoiceSession.Mode.COMMAND, s.getMode());
+	}
+
+	@Test
 	public void addonOwnedOptionCarriesStableTarget() {
 		VoiceSession.Option option = new VoiceSession.Option("youtube:video-id", "Numb",
 				"Linkin Park", "youtube");
