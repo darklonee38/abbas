@@ -234,7 +234,7 @@ class VoiceCommandHandler {
 			}
 			if (aSubChange.matcher(cmd).matches()) {
 				eng.getSubtitleStreamInfo().main().onSuccess(sub -> {
-					if (!sub.isEmpty()) return;
+					if (sub.isEmpty()) return;
 					var cur = eng.getCurrentSubtitleStreamInfo();
 					if (cur == null) eng.setCurrentSubtitleStream(sub.get(0));
 					else eng.setCurrentSubtitleStream(next(sub, cur));
