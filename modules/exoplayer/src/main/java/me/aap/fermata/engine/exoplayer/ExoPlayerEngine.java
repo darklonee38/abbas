@@ -557,7 +557,7 @@ public class ExoPlayerEngine extends MediaEngineBase implements Player.Listener 
 		listener.onEngineError(this, error);
 	}
 
-	static MediaEngineException safePlaybackError(PlaybackException error) {
+	static MediaEngineException safePlaybackError(Throwable error) {
 		return new MediaEngineException("EXO_PLAYBACK_FAILED: " + safePlaybackMessage(
 				(error == null) ? null : error.getMessage()));
 	}
