@@ -20,9 +20,10 @@ public class TvErrorMessagesTest {
 	@Test
 	public void uiMessageDoesNotExposeStalkerIdentityOrToken() {
 		String safe = TvErrorMessages.from(new IllegalStateException(
-				"MAC 00:1A:79:01:02:03 serial-secret https://stream.invalid/watch?token=secret"));
+				"MAC 00:1A:79:01:02:03 serial=serial-secret device_id=device-secret https://stream.invalid/watch?token=secret"));
 		assertFalse(safe.contains("01:02:03"));
 		assertFalse(safe.contains("serial-secret"));
+		assertFalse(safe.contains("device-secret"));
 		assertFalse(safe.contains("token=secret"));
 		assertFalse(safe.contains("stream.invalid"));
 	}
