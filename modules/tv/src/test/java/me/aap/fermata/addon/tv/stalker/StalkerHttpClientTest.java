@@ -50,6 +50,16 @@ public class StalkerHttpClientTest {
 	private static final String MAC = "00:1A:79:01:02:03";
 
 	@Test
+	public void redirectPolicyRejectsHttpsToHttpDowngrade() {
+		assertTrue(StalkerHttpClient.isHttpsDowngrade(URI.create("https://portal.invalid/a"),
+				URI.create("http://portal.invalid/b")));
+		assertFalse(StalkerHttpClient.isHttpsDowngrade(URI.create("https://portal.invalid/a"),
+				URI.create("https://portal.invalid/b")));
+		assertFalse(StalkerHttpClient.isHttpsDowngrade(URI.create("http://portal.invalid/a"),
+				URI.create("http://portal.invalid/b")));
+	}
+
+	@Test
 	public void healthCheckPassesThroughCompressedCatalogAndBoundedProbe() throws Exception {
 		AtomicReference<String> range = new AtomicReference<>();
 		AtomicReference<String> cookie = new AtomicReference<>();
