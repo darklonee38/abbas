@@ -31,10 +31,10 @@ final class StalkerErrorMapper {
 					"Unable to find Stalker portal %1$s.", account.redact(account.getPortal()));
 		} else if (root instanceof ConnectException) {
 			message = text(R.string.stalker_error_connect,
-					"Unable to connect to Stalker portal %1$s.", account.getPortal());
+					"Unable to connect to Stalker portal %1$s.", account.redact(account.getPortal()));
 		} else if (root instanceof SocketTimeoutException) {
 			message = text(R.string.stalker_error_timeout,
-					"Stalker portal did not respond in time: %1$s.", account.getPortal());
+					"Stalker portal did not respond in time: %1$s.", account.redact(account.getPortal()));
 		} else if (root instanceof HttpStatusException status) {
 			if ((status.status == HttpURLConnection.HTTP_UNAUTHORIZED) ||
 					(status.status == HttpURLConnection.HTTP_FORBIDDEN)) {
