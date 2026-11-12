@@ -176,6 +176,7 @@
 
     <string name="voice_search">Voice search</string>
 	<string name="voice_control">Voice control</string>
+	<string name="voice_control_section_sub">Configure the existing ABBAS assistant, vehicle trigger, spoken feedback, and recognition language.</string>
 	<string name="voice_trigger_assign">Assign vehicle voice button</string>
 	<string name="voice_trigger_current">Current: %1$s. Active only while ABBAS is visible.</string>
 	<string name="voice_trigger_unassigned">Not assigned</string>

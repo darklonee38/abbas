@@ -22,7 +22,10 @@ final class VoicePrefsBuilder {
 	}
 
 	static void add(MainActivityDelegate activity, PreferenceSet parent) {
-		PreferenceSet voice = parent.subSet(o -> o.title = R.string.voice_control);
+		PreferenceSet voice = parent.subSet(o -> {
+			o.title = R.string.voice_control;
+			o.subtitle = R.string.voice_control_section_sub;
+		});
 		voice.addBooleanPref(o -> {
 			o.title = R.string.enable;
 			o.pref = VOICE_CONTROl_ENABLED;
