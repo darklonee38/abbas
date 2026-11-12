@@ -137,8 +137,14 @@ final class VoiceInteractionCoordinator {
 		voiceSession.clear();
 	}
 
-	void beginTextInput() {
+	long beginTextInput() {
 		voiceSession.beginTextInput();
+		return voiceSession.getGeneration();
+	}
+
+	boolean isCurrentTextInput(long generation) {
+		return (voiceSession.getMode() == VoiceSession.Mode.TEXT_INPUT) &&
+				(voiceSession.getGeneration() == generation);
 	}
 
 	void beginCommand() {

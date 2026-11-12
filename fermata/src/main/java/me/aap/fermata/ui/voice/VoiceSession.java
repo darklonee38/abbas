@@ -53,9 +53,15 @@ public final class VoiceSession {
 	private Mode mode = Mode.COMMAND;
 	private List<Option> options = Collections.emptyList();
 	private long selectionExpiresAt;
+	private long generation;
 
 	public Mode getMode() {
 		return mode;
+	}
+
+	/** Returns the identity of the current voice interaction state. */
+	public long getGeneration() {
+		return generation;
 	}
 
 	public void beginCommand() {
@@ -75,6 +81,7 @@ public final class VoiceSession {
 		options = Collections.unmodifiableList(new ArrayList<>(candidates.subList(0, size)));
 		mode = Mode.SELECTION;
 		selectionExpiresAt = now + SELECTION_TIMEOUT_MS;
+		generation++;
 	}
 
 	public boolean isSelectionActive(long now) {
@@ -105,6 +112,7 @@ public final class VoiceSession {
 	}
 
 	private void clear(Mode next) {
+		generation++;
 		mode = next;
 		options = Collections.emptyList();
 		selectionExpiresAt = 0;

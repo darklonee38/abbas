@@ -1167,14 +1167,14 @@ public class MainActivityDelegate extends ActivityDelegate
 		EditText t = getAppActivity().createEditText(ctx);
 		if (isCarActivity() && getPrefs().getVoiceControlEnabledPref()) {
 			t.setOnLongClickListener(v -> {
-				voiceInteraction.beginTextInput();
+				long textInputGeneration = voiceInteraction.beginTextInput();
 				startSpeechRecognizer(null, true).onSuccess(q -> {
 					if ((q != null) && !q.isEmpty()) t.setText(q.get(0));
 				})
 						.onCompletion((result, fail) -> {
 							// Do not let this older text-input session overwrite a newer
 							// command or selection mode.
-							if (voiceInteraction.getMode() == VoiceSession.Mode.TEXT_INPUT) {
+							if (voiceInteraction.isCurrentTextInput(textInputGeneration)) {
 								voiceInteraction.beginCommand();
 							}
 						});
