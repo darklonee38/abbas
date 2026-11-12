@@ -1105,7 +1105,7 @@ public class MainActivityDelegate extends ActivityDelegate
 	}
 
 	public boolean isCurrentVoiceTransaction(long requestId) {
-		return voiceInteraction.isCurrentTransaction(requestId);
+		return (requestId == 0L) || voiceInteraction.isCurrentTransaction(requestId);
 	}
 
 	public void completeVoiceTransaction(long requestId) {
@@ -1121,10 +1121,6 @@ public class MainActivityDelegate extends ActivityDelegate
 		return voiceInteraction.resolveSelection(phrase);
 	}
 
-	/** Rejects delayed voice work after a newer interaction supersedes its transaction. */
-	boolean isCurrentVoiceTransaction(long requestId) {
-		return (requestId == 0L) || voiceInteraction.isCurrentTransaction(requestId);
-	}
 
 	public FutureSupplier<List<String>> startSpeechRecognizer() {
 		return voiceInteraction.startSpeechRecognizer();
