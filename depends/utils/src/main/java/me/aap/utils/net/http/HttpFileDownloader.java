@@ -558,7 +558,7 @@ public class HttpFileDownloader {
 		}
 	}
 
-	private static String safeUrl(URL url) {
+	static String safeUrl(URL url) {
 		if (url == null) return "[invalid-url]";
 		String host = url.getHost();
 		if (host == null || host.isBlank()) return "[redacted-url]";
