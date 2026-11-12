@@ -15,10 +15,10 @@
 | HTTP explicit-consent enforcement for M3U/Xtream/Stalker | Devam | Must cover source creation, persisted sources, and all connection entry points |
 | IPTV/Xtream/Stalker secret-safe logging audit and tests | Devam | Existing redact helpers found; all call sites still require audit |
 | Package identity migration to `com.abbas.auto` | Devam | Base applicationId now `com.abbas`; Auto release resolves to `com.abbas.auto`, debug to `com.abbas.auto.debug`; updater manifest generator/tests aligned. Full provider/authority/build verification still pending |
-| Release updater endpoint and APK/signature/hash verification | Devam | Removed repository/LFS fallback; updater accepts only GitHub Release assets. Installed-signature, APK hash/size and pre-install gate still pending |
-| Release signing configuration and documentation | Devam | `keystore.properties` plus `STORE_FILE`, `STORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` supported; legacy FERMATAX env names remain as fallback; secrets files ignored. Keystore generation/backup and Release upload documentation still pending |
+| Release updater endpoint and APK/signature/hash verification | Devam | GitHub Release-only manifest/APK assets; APK package/version/size/SHA-256 and signer-certificate SHA-256 are checked before Android installer. CI verification pending |
+| Release signing configuration and documentation | Bitti | `keystore.properties` and `STORE_*` env supported; partial config rejected; private key files ignored; README documents key generation, offline backup, Release assets, and `REQUEST_INSTALL_PACKAGES` rationale |
 | Dead-code/dependency analysis and safe removals | Devam | Must verify APK contents and references before deletion |
-| ABBAS branding and README cleanup | Devam | Not started |
+| ABBAS branding and README cleanup | Devam | README identifies ABBAS and removes KingInstaller/Shizuku and Dem TV directions; full resource/string/TTS scan still pending |
 | CI, APK inspection, residual scan, PR creation | Devam | Run `43170437488` failed at Java compilation because `GithubUpdater` still called removed `repositoryAssetUrl`; fixed in `b3390df`. New CI run must complete before APK inspection |
 
 ## Guardrails
@@ -35,12 +35,14 @@
 - Default application ID changed from `me.app.fermataX` to `com.abbas`. The Auto release variant therefore resolves to `com.abbas.auto`; the Auto debug test/build variant resolves to `com.abbas.auto.debug`.
 - Updater manifest generator and package identity tests aligned with `com.abbas.auto.debug`.
 
-## Latest CI diagnosis and fix
+## Latest CI diagnosis and fixes
 
 - Run `43170437488` failed in `:fermata:compileAutoDebugJavaWithJavac`: `GithubUpdater.java` referenced the removed `UpdateManifest.repositoryAssetUrl(JSONObject,String)` fallback.
-- Removed that obsolete raw repository/LFS fallback call. Updater now requires the declared GitHub Release manifest asset, consistent with `UpdateManifest.assetUrl()`.
-- Fix commit: `b3390df0d882c5c29fd5ca58f45525676ac546b7`.
+- Removed the obsolete repository/LFS fallback call; updater now requires the declared GitHub Release manifest asset. Fix commit: `b3390df0d882c5c29fd5ca58f45525676ac546b7`.
+- Updated `UpdateActivity` to compare SHA-256 digests of the installed and downloaded APK signing certificates (single-signer only), in addition to package/version and APK size/content SHA-256. Commit: `b8aa8fa4db6c2f4c5a3019ba343ba3dcb47c4795`.
+- Added release-key generation/backup, environment configuration, Release asset publishing, and `REQUEST_INSTALL_PACKAGES` documentation to README. Commit: `0dfd81aee9d141bd8e555b635487bdc606a31de6`.
+- The failed run's exact compiler issue is fixed in source, but CI for the latest commit is still pending/in progress; no build/test success is claimed.
 
 ## Next step
 
-Inspect the new CI run for the fix commit. Continue package identity audit, signing docs, HTTP consent and secret-log audits; do not treat the updater as verified until the build and tests pass.
+Inspect CI for the latest SHA. Continue package identity and branding audits, then implement the HTTP-consent and secret-log policies with complete connection-path coverage. Dead-code removal remains gated on APK inspection.
