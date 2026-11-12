@@ -35,6 +35,18 @@ public class VoiceInteractionTransactionTest {
 	}
 
 	@Test
+	public void completedSelectionResultRemainsValidUntilAnotherGenerationStarts() {
+		VoiceInteractionTransaction transaction = new VoiceInteractionTransaction();
+		transaction.begin(8L);
+		transaction.complete(8L);
+		assertTrue(transaction.isCurrentOrCompleted(8L));
+		transaction.begin(9L);
+		assertFalse(transaction.isCurrentOrCompleted(8L));
+		transaction.cancel();
+		assertFalse(transaction.isCurrentOrCompleted(9L));
+	}
+
+	@Test
 	public void completionAndCancellationCloseTheGeneration() {
 		VoiceInteractionTransaction transaction = new VoiceInteractionTransaction();
 		transaction.begin(3L);

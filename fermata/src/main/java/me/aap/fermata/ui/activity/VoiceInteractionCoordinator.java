@@ -171,8 +171,12 @@ final class VoiceInteractionCoordinator {
 			if ((addon instanceof VoiceSearchAddon voice) &&
 					voice.resolveVoiceSelection(activity, option.getStableId())) return true;
 		}
+		long requestId = transaction.isActive() ? transaction.getGeneration() : 0L;
 		var selection = activity.getMediaServiceBinder().captureUserSelection();
 		activity.getLib().getItem(option.getStableId()).main(activity.getHandler()).onSuccess(item -> {
+			// Selection completion is allowed after its own transaction completes, but never
+			// after a newer request or explicit cancellation supersedes it.
+			if ((requestId != 0L) && !transaction.isCurrentOrCompleted(requestId)) return;
 			if (item instanceof PlayableItem playable) {
 				activity.getBody().playSelection(selection, playable, -1);
 				if (!selection.forwardToCar()) activity.goToItem(playable);
