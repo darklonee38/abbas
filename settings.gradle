@@ -9,6 +9,10 @@ def abi = gradle.startParameter.projectProperties.get('ABI')
 gradle.ext.abiFilters = (abi != null) ? abi.split(",") : ['arm64-v8a', 'armeabi-v7a', 'x86_64']
 
 gradle.ext.localProps = new Properties()
+def keystorePropsFile = file('keystore.properties')
+if (keystorePropsFile.isFile()) {
+    gradle.ext.localProps.load(keystorePropsFile.newDataInputStream())
+}
 gradle.ext.enableGoogleServices = false
 gradle.ext.legacyUploadCertificateSha256 =
         '6bd055aeedbc13a67b05310f1e3fe0f1aa1dd690e1b7c2637aa5d31ea1ba910e'
@@ -21,12 +25,14 @@ if (localPropsFile.isFile()) {
 }
 
 [
-        storeFile    : 'FERMATAX_STORE_FILE',
-        storePassword: 'FERMATAX_STORE_PASSWORD',
-        keyAlias     : 'FERMATAX_KEY_ALIAS',
-        keyPassword  : 'FERMATAX_KEY_PASSWORD'
+        storeFile    : 'STORE_FILE',
+        storePassword: 'STORE_PASSWORD',
+        keyAlias     : 'KEY_ALIAS',
+        keyPassword  : 'KEY_PASSWORD'
 ].each { property, environment ->
     def value = System.getenv(environment)
+    def legacyValue = System.getenv('FERMATAX_' + environment)
+    if (value == null || value.isBlank()) value = legacyValue
     if (value != null && !value.isBlank()) gradle.ext.localProps[property] = value
 }
 
@@ -36,7 +42,7 @@ def configuredSigningProperties = signingProperties.findAll {
     value != null && !value.toString().isBlank()
 }
 if (!configuredSigningProperties.isEmpty() && configuredSigningProperties.size() != signingProperties.size()) {
-    throw new GradleException('Release signing is only partially configured. Set all FERMATAX signing values.')
+    throw new GradleException('Release signing is only partially configured. Set STORE_FILE, STORE_PASSWORD, KEY_ALIAS and KEY_PASSWORD.')
 }
 
 gradle.ext.releaseSigningConfigured = configuredSigningProperties.size() == signingProperties.size()
