@@ -54,3 +54,28 @@ Eski kurulumların güncellenmesi için paket kimliği ve imza korunur. Dağıt�
 ## Lisans ve kaynak
 
 ABBAS, [Fermata Media Player](https://github.com/AndreyPavlenko/Fermata) ve FermataX kaynaklarından türetilmiş GPL-3.0 projesidir. Andrey Pavlenko ve diğer katkıcıların telif/lisans bildirimleri korunur. Kaldırılan özelliklerin kaynak geçmişi Git’te bulunabilir; bu onların dağıtılan APK’da bulunduğu anlamına gelmez. [Lisans](LICENSE).
+
+## Release signing and update publishing
+
+Release APKs must be signed with the approved ABBAS upload certificate. Configure signing locally with a root-level `keystore.properties` file (never commit it):
+
+```properties
+STORE_FILE=/absolute/path/to/abbas-upload.jks
+STORE_PASSWORD=your-keystore-password
+KEY_ALIAS=abbas-upload
+KEY_PASSWORD=your-key-password
+```
+
+The same values can be supplied through the `STORE_FILE`, `STORE_PASSWORD`, `KEY_ALIAS`, and `KEY_PASSWORD` environment variables. The legacy `FERMATAX_STORE_FILE`, `FERMATAX_STORE_PASSWORD`, `FERMATAX_KEY_ALIAS`, and `FERMATAX_KEY_PASSWORD` names remain accepted for existing build environments. Partial configuration is rejected. Release artifact tasks require an explicitly configured signing key; debug/test builds are not silently re-signed as release builds.
+
+Create the upload key once and keep at least two encrypted offline backups. Example:
+
+```bash
+keytool -genkeypair -v -keystore abbas-upload.jks -alias abbas-upload -keyalg RSA -keysize 4096 -validity 10000
+```
+
+Record the certificate SHA-256 fingerprint and protect the keystore and passwords separately. Losing the key prevents in-place updates for installations signed with it. Never upload the keystore, passwords, or `keystore.properties` to GitHub.
+
+For a release, build the intended Auto variant with the approved signing key, generate the update metadata with `scripts/create_update_manifest.py`, and upload both `ABBAS-universal.apk` and `update-auto-debug.json` as assets of the same published GitHub Release. The updater accepts only those declared Release assets and verifies package ID, version, file size, APK SHA-256, and signing-certificate SHA-256 before opening Android's package installer. Installation always requires the user's confirmation.
+
+The app declares `REQUEST_INSTALL_PACKAGES` because its in-app updater hands a verified APK to Android's system package installer. Android may require the user to grant the app permission to request package installation; ABBAS does not install silently.
