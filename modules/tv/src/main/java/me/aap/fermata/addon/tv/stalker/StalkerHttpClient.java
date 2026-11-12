@@ -459,6 +459,9 @@ final class StalkerHttpClient {
 					throw new IOException("Stalker redirect destination is invalid", ex);
 				}
 				validateHttpUri(next);
+				if (isHttpsDowngrade(current, next)) {
+					throw new IOException("Stalker HTTPS redirect to HTTP was blocked");
+				}
 				includeSensitive &= sameOrigin(current, next);
 				close(connection.getErrorStream());
 				close(connection.getInputStream());
@@ -520,6 +523,11 @@ final class StalkerHttpClient {
 	private static int effectivePort(URI uri) {
 		if (uri.getPort() >= 0) return uri.getPort();
 		return "https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80;
+	}
+
+	static boolean isHttpsDowngrade(URI current, URI next) {
+		return "https".equalsIgnoreCase(current.getScheme()) &&
+				"http".equalsIgnoreCase(next.getScheme());
 	}
 
 	private static void validateHttpUri(URI uri) throws IOException {
