@@ -39,6 +39,10 @@ public final class DiagnosticSanitizer {
 			"(?i)\\b(?:access[_-]?token|refresh[_-]?token|id[_-]?token|api[_-]?key|" +
 					"password|passwd|credential|client[_-]?secret|secret)\\s*[:=]\\s*" +
 					"(?:\\\"[^\\\"]*\\\"|'[^']*'|[^\\s,;}&]+)");
+	private static final Pattern MAC_ADDRESS_PATTERN = Pattern.compile(
+			"(?i)\\b(?:[0-9a-f]{2}[:-]){5}[0-9a-f]{2}\\b");
+	private static final Pattern DEVICE_ID_PATTERN = Pattern.compile(
+			"(?i)\\b(?:serial(?:[_ -]?number)?|device[_ -]?id|mac[_ -]?address)\\s*[:=]\\s*[^\\s,;]+");
 	private static final Pattern BEARER_PATTERN = Pattern.compile(
 			"(?i)\\b(?:bearer|basic)\\s+[a-z0-9._~+/=-]+");
 	private static final Pattern WINDOWS_PATH_PATTERN = Pattern.compile(
@@ -120,6 +124,8 @@ public final class DiagnosticSanitizer {
 		result = COOKIE_PATTERN.matcher(result).replaceAll("cookie=" + REDACTED);
 		result = SECRET_ASSIGNMENT_PATTERN.matcher(result).replaceAll(REDACTED);
 		result = BEARER_PATTERN.matcher(result).replaceAll(REDACTED);
+		result = MAC_ADDRESS_PATTERN.matcher(result).replaceAll("[device-id]");
+		result = DEVICE_ID_PATTERN.matcher(result).replaceAll("device-id=" + REDACTED);
 		result = WINDOWS_PATH_PATTERN.matcher(result).replaceAll("[path]");
 		result = UNIX_PATH_PATTERN.matcher(result).replaceAll("[path]");
 
