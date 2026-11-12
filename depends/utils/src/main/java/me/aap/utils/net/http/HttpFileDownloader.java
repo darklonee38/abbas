@@ -241,7 +241,7 @@ public class HttpFileDownloader {
 			diagnosticStartedAt = monotonicClock.getAsLong();
 			diagnostic("download_started", Map.of("phase", "request"), null);
 
-			Log.d("Downloading ", source, " to ", destination);
+			Log.d("Downloading ", safeUrl(source), " to ", destination);
 			boolean exists = destination.isFile();
 
 			if (exists && !forceRevalidateRequest) {
@@ -339,7 +339,7 @@ public class HttpFileDownloader {
 
 			if (notModified) {
 				if (!destination.isFile()) {
-					fail(new IOException("HTTP 304 without an existing file: " + opts.url), status);
+					fail(new IOException("HTTP 304 without an existing file: " + safeUrl(opts.url)), status);
 					response.getConnection().close();
 					finish();
 					return completedVoid();
@@ -350,7 +350,7 @@ public class HttpFileDownloader {
 				if (status.getContentEncoding() == null)
 					status.setEncoding(prefs.getStringPref(ENCODING));
 				prefs.applyLongPref(TIMESTAMP, System.currentTimeMillis());
-				Log.d("File not modified: ", source, ". Returning existing file: ", destination);
+				Log.d("File not modified: ", safeUrl(source), ". Returning existing file: ", destination);
 				succeed(status);
 				finish();
 				return completedVoid();
@@ -358,7 +358,7 @@ public class HttpFileDownloader {
 
 			int statusCode = response.getStatusCode();
 			if ((statusCode < HttpStatusCode.OK) || (statusCode >= 300)) {
-				fail(new HttpException("HTTP " + statusCode + " while downloading " + opts.url),
+				fail(new HttpException("HTTP " + statusCode + " while downloading " + safeUrl(opts.url)),
 						status);
 				response.getConnection().close();
 				finish();
@@ -454,7 +454,7 @@ public class HttpFileDownloader {
 		}
 
 		private void succeed(DownloadStatus status) {
-			Log.d("Downloaded ", source, " to ", destination);
+			Log.d("Downloaded ", safeUrl(source), " to ", destination);
 			diagnosticTerminal("download_completed", Map.of(
 					"byte_count", Math.max(0L, status.bytesDownloaded()),
 					"duration_ms", diagnosticDuration()), null);
@@ -467,12 +467,12 @@ public class HttpFileDownloader {
 					"duration_ms", diagnosticDuration(),
 					"phase", stage.name()), error);
 			if (returnExistingOnFail && destination.isFile()) {
-				Log.e(error, "Failed to download: ", status.getUrl(), ". Returning existing file: ",
+				Log.e(error, "Failed to download: ", safeUrl(status.getUrl()), ". Returning existing file: ",
 						destination);
 				status.failure = error;
 				promise.completeSuccess(status, listener);
 			} else {
-				Log.e(error, "Failed to download ", status.getUrl(), " to ", destination);
+				Log.e(error, "Failed to download ", safeUrl(status.getUrl()), " to ", destination);
 				promise.completeFailure(error, status, listener);
 			}
 		}
@@ -556,6 +556,14 @@ public class HttpFileDownloader {
 			ex.addSuppressed(new IOException("Unable to create staging file: " + fallback));
 			throw ex;
 		}
+	}
+
+	private static String safeUrl(URL url) {
+		if (url == null) return "[invalid-url]";
+		String host = url.getHost();
+		if (host == null || host.isBlank()) return "[redacted-url]";
+		int port = url.getPort();
+		return url.getProtocol() + "://" + host + ((port < 0) ? "" : ":" + port) + "/[redacted]";
 	}
 
 	private static String destinationKey(File destination) {
