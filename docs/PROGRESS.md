@@ -42,9 +42,10 @@
 - Updated `UpdateActivity` to compare SHA-256 digests of the installed and downloaded APK signing certificates (single-signer only), in addition to package/version and APK size/content SHA-256. Commit: `b8aa8fa4db6c2f4c5a3019ba343ba3dcb47c4795`.
 - Added release-key generation/backup, environment configuration, Release asset publishing, and `REQUEST_INSTALL_PACKAGES` documentation to README. Commit: `0dfd81aee9d141bd8e555b635487bdc606a31de6`.
 - New Xtream sources now default to HTTPS when the host has no scheme; invalid scheme indices also fall back to HTTPS. Added a unit test. Commits: `b130c9f917540bcd1cc3fe49f45228e0255752ab`, `ab8e538b31a58edad14ee27c167149825f011474`.
+- M3U source `toString()` no longer prints the raw playlist URL, which can carry credentials in its path or query. Commit: `30b45304b43be7498750ac5762170e5333a309c6`.
 - Stalker connection error messages now redact the portal value before display. Commit: `2c444b3dd3dcebe4bfff3a11826fa6cfc9755e89`.
 - The failed run's exact compiler issue is fixed in source, but CI for the latest commit is still pending/in progress; no build/test success is claimed.
 
 ## Next step
 
-Inspect CI for the latest SHA and rerun after the latest commits. Continue implementing HTTP consent with all-source and all-network-path enforcement; audit M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
+Inspect CI for the latest SHA and rerun after the latest commits. Continue implementing HTTP consent with all-source and all-network-path enforcement; finish M3U/Xtream/Stalker URL redaction and diagnostics. Complete package/provider and branding scans. Dead-code removal remains gated on APK inspection.
