@@ -386,6 +386,7 @@ class VoiceCommandHandler {
 	}
 
 	private void searchInFragment(@IdRes int id, VoiceCommand cmd, long deadline) {
+		if (!activity.isCurrentVoiceTransaction(cmd.getVoiceRequestId())) return;
 		boolean alive = !activity.getAppActivity().isDestroyed() &&
 				!activity.getAppActivity().isFinishing();
 		if (!VoiceReadinessPolicy.shouldRetry(SystemClock.uptimeMillis(), deadline, alive)) {
@@ -400,6 +401,7 @@ class VoiceCommandHandler {
 				(f.getFragmentId() == R.id.playlists_fragment)) {
 			MediaLibFragment mf = (MediaLibFragment) f;
 			mf.findFolder(cmd.getQuery()).onSuccess(folder -> {
+				if (!activity.isCurrentVoiceTransaction(cmd.getVoiceRequestId())) return;
 				if (folder == null) {
 					f.voiceCommand(cmd);
 				} else {
