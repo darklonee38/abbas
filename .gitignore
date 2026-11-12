@@ -48,6 +48,7 @@ google-services.json
 TODO
 *.jks
 *.keystore
+keystore.properties
 *.p12
 *.pfx
 *.log
