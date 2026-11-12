@@ -17,8 +17,8 @@ public class TvPlaylistUrlsTest {
 	}
 
 	@Test
-	public void completesBareHostWithHttp() {
-		assertEquals("http://example.com/list.m3u",
+	public void completesBareHostWithHttps() {
+		assertEquals("https://example.com/list.m3u",
 				TvPlaylistUrls.normalize("example.com/list.m3u"));
 	}
 
