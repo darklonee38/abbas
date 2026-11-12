@@ -17,6 +17,24 @@ import org.junit.Test;
 
 public class DiagnosticReportExporterTest {
 	@Test
+	public void exportValidationRejectsRawUrlsAndAccountCredentials() throws Exception {
+		Path root = Files.createTempDirectory("diagnostic-export-secret");
+		Path payload = writeText(root.resolve("diagnostics-test-current.jsonl"),
+				"{\"schema_version\":1,\"url\":\"https://alice:secret@example.invalid/live\"}");
+		assertThrows(IOException.class,
+				() -> DiagnosticReportExporter.validateSafePayload(payload.toFile()));
+	}
+
+	@Test
+	public void exportValidationRejectsStalkerDeviceIdentifiers() throws Exception {
+		Path root = Files.createTempDirectory("diagnostic-export-device");
+		Path payload = writeText(root.resolve("crash-1-2.json"),
+				"{\"schema_version\":1,\"mac\":\"00:1A:79:01:02:03\"}");
+		assertThrows(IOException.class,
+				() -> DiagnosticReportExporter.validateSafePayload(payload.toFile()));
+	}
+
+	@Test
 	public void productionCacheLimitsAreThreeReportsAndTwentyFourMiB() {
 		assertEquals(3, DiagnosticReportExporter.MAX_CACHED_REPORTS);
 		assertEquals(24L * 1024L * 1024L,
